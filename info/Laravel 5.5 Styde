@@ -45,5 +45,16 @@ Must be version 7.1.x or latest
 
 	https://styde.net/instalacion-de-laravel-valet-en-linux/
 	https://styde.net/composer-manejador-paquetes-php/
-	
+
+
+
+5. Instalar composer from terminal
+	sudo apt install composer
+
+6. Verify instalation of Composer
+	# composer --version
+	Composer 1.6.3 2018-01-31 16:28:17
+
+7. 	
+
 
