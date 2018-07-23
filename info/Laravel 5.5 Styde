@@ -1,0 +1,49 @@
+Hacks Laravel 5.5
+
+1. Verify PHP versión
+
+# php -v
+
+Must be version 7.1.x or latest
+
+
+2. Install composer
+
+	https://getcomposer.org/
+
+	Go to Download Composer
+		https://getcomposer.org/download/
+
+		Copy and eject this in Terminal
+
+		#	php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+			php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+			php composer-setup.php
+			php -r "unlink('composer-setup.php');"
+
+	Confirmation Message:
+	
+	Composer (version 1.6.5) successfully installed to: /var/www/html/dev/Laravel/composer.phar
+	Use it: php composer.phar
+
+	Composer is adding to actual folder
+
+
+	To use:
+	php composer.phar to exect
+
+3. Getting Started
+	https://getcomposer.org/doc/00-intro.md
+
+
+
+4. Sources
+	https://www.patreon.com/duiliopalacios
+	https://laravel.com/docs/5.5
+
+	https://styde.net/instalacion-de-composer-y-laravel/
+
+	https://styde.net/instalacion-de-laravel-valet-en-linux/
+	https://styde.net/composer-manejador-paquetes-php/
+	
+
