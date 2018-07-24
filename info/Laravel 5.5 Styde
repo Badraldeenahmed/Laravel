@@ -55,6 +55,61 @@ Must be version 7.1.x or latest
 	# composer --version
 	Composer 1.6.3 2018-01-31 16:28:17
 
-7. 	
+7. 	To avoid write user pass for github acount, clone the porject with ssh method
+	https://blog.openalfa.com/como-evitar-que-git-solicite-usuario-y-contrasena-cada-vez
+	https://info-2-blog.blogspot.com/2015/12/evitar-que-git-te-pida-usuario-y.html
+	https://www.enmimaquinafunciona.com/pregunta/23230/como-garantizar-que-git-no-me-pregunta-por-mi-github-nombre-de-usuario-y-contrasena
+	http://eegirls.com/cmo-puedo-garantizar-que-git-no-me-solicite-mi-nombre-de-usuario-y-contrasea-github.html
+	https://github.com/torresj/IV-GII-13-14/wiki/Generar-clave-SSH-para-no-tener-que-meter-usuario-y-contrase%C3%B1a-cada-vez-en-Git
+
+
+8. Show list commands with composer
+	# php composer.phar
+
+9. 	The most common commands to use are this:
+	install
+	dump-autoload
+	create-project
+
+10. Instructions to begin use composer
+	https://getcomposer.org/doc/00-intro.md
+
+11. Install composer globally in Linux or Mac
+	Move the file donloaded to the directory
+
+	# sudo mv composer.phar /usr/local/bin/composer
+
+12. The instalation of Composer is finished and we can use composer fro any folder of the system
+
+13, To update composer (in some cases):
+	#composer update
+
+14. Now we can begin to create our first project with
+	Init Config for project
+	
+	https://laravel.com/docs/5.5#installation
+		Via Composer Create-Project
+	
+	# composer create-project --prefer-dist laravel/laravel blog "5.5.*"	
+	.
+	.
+	.
+	Package manifest generated successfully.
+	> @php artisan key:generate
+	Application key [base64:1cllIzRwS9ZzbZDuPL05H7QMS8eCxZ1WmLWFQmdSgGM=] set successfully.
+	
+	This is all to get a new project, to check it:
+
+	# ls 
+	# cd <name_project>
+
+15. We can use the commando to init development server
+	#  php artisan serve
+	Laravel development server started: <http://127.0.0.1:8000>
+
+
+
+
+
 
 
