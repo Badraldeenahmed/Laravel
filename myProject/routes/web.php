@@ -28,3 +28,7 @@ Route::get('/usuarios/{id}', function($id){
 	return "Mostrando detalle del usuario: {$id}";
 });
 
+//Creating Users
+Route::get('/usuarios/nuevo', function(){
+	return 'Creando nuevo usuario';
+});
