@@ -20,3 +20,6 @@ Route::get('/', function (){
 	return 'Home';
 });
 
+Route::get('/usuarios', function(){
+	return 'Usuarios';
+});
