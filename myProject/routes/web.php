@@ -24,6 +24,7 @@ Route::get('/usuarios', function(){
 	return 'Usuarios';
 });
 
-Route::get('/usuarios/detalles', function(){
-	return 'Mostrando detalle del usuario: ' . $_GET['id'];
+Route::get('/usuarios/{id}', function($id){
+	return 'Mostrando detalle del usuario: ' . $id;
 });
+
