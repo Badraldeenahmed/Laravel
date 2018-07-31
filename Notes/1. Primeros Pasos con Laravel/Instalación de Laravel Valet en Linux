@@ -1,0 +1,147 @@
+Instalación de Laravel Valet en Linux
+
+Laravel Valet es un entorno de desarrollo minimalista para Mac, sin embargo -gracias a la comunidad- ahora también está disponible para Linux. Aunque no es un paquete oficial de Laravel, esta versión funciona muy bien para distintas distribuciones de Linux como Ubuntu, Fedora y Arch y sus correspondientes derivados.  Además nos ofrece las mismas características y funcionalidades que tiene la versión oficial que es para Mac.
+
+
+Si tienes una Mac puedes seguir el artículo de Valet para Mac.
+
+Valet para Linux configura su sistema para ejecutar siempre Nginx en segundo plano cuando se inicia su máquina. Luego, usando Dnsmasq, se toman todas las peticiones y las apunta al dominio *.dev haciendo referencia a todos los sitios que tengas instalados en tu máquina.
+
+Dnsmasq proporciona servicios como un servidor de nombres de dominio (DNS), puede almacenar en caché las consultas DNS para mejorar las velocidades de conexión a los sitios visitados anteriormente, y como un servidor DHCP, dnsmasq puede ser utilizado para proporcionar direcciones IP internas y rutas a los equipos de una LAN.
+
+Por ejemplo, si tienes un proyecto Laravel en una carpeta llamada “tienda” podrás acceder desde el navegador con tienda.dev, esto lo veremos con más claridad más adelante.
+
+¿Por que debería utilizar Valet?
+La gran mayoría de los usuarios de Linux tienen máquinas de unos 2 GB de RAM, 4 o quizás más. Imaginemos que tenemos una máquina de 3 GB de RAM, instalar Homestead requiere que tengamos Virtual Box o VMware incluyendo Vagrant. Esto hace que nuestra memoria se ocupe al menos un 25%, pero si además utilizamos PHPStorm, el cual también ocupa un buen porcentaje de la memoria, sin duda alguna nuestra máquina tendrá problemas de rendimiento. Es aquí donde Valet le sonríe a este tipo de problemas.
+
+Valet utiliza aproximadamente 7 MB de memoria RAM, aunque debemos saber que no es un reemplazo completo de Vagrant o Homestead, sino que proporciona una gran alternativa si deseamos elementos básicos y flexibles pero nos pueden ayudar mucho mientras estamos trabajando en una máquina con una cantidad limitada de recursos.
+
+Requerimientos
+Linux (Ubuntu, Fedora, Arch)
+Dependencias: sudo apt-get install libnss3-tools jq xsel
+PHP >= 5.6
+Paquetes PHP: php*-fpm php*-cli php*-curl php*-mbstring php*-mcrypt php*-xml php*-zip
+Paquetes PHP opcionales: php*-sqlite3 php*-mysql php*-pgsql
+Instalación
+Para instalar Laravel Valet en Linux sólo debemos requerirlo de forma global desde Composer con el siguiente comando:
+
+
+composer global require cpriego/valet-linux
+1
+composer global require cpriego/valet-linux
+Con esto debemos comprobar que tenemos disponible el comando valet, si obtenemos un error y utilizas bash la terminal por defecto debes abrir el archivo .bashrc ubicado en la carpeta /home/usuario/ y agregar al final:
+
+
+export PATH="$PATH:$HOME/.composer/vendor/bin"
+1
+export PATH="$PATH:$HOME/.composer/vendor/bin"
+Si usas ZSH entonces debemos editar el archivo .zshrc ubicado en la dirección /home/usuario/ donde agregaremos una línea al final de archivo, con esa línea solo estaremos escribiendo un alias para Valet y no estamos exportando todos los ejecutables globales de Composer.
+
+
+alias valet="~/.composer/vendor/bin/valet"
+1
+alias valet="~/.composer/vendor/bin/valet"
+Una vez que tengamos el comando disponible vamos a proceder con la instalación de los servicios de Valet, pero antes debes detener todos los procesos que estén escuchando en el puerto 80 como apache2. Puedes detener este proceso con el siguiente comando:
+
+
+sudo service apache2 stop
+1
+sudo service apache2 stop
+Para instalar los servicios requeridos por Valet y todas sus dependencias, esto quiere decir que si no tenemos Nginx lo instalará por nosotros. Vamos a escribir en nuestra terminal:
+
+
+valet install
+1
+valet install
+Ahora debemos organizarnos y especificar cuál sera una de las carpetas que almacenará los proyectos para nuestro trabajo, en mi caso me gusta tener una carpeta Code o Projects, puedes crearla en la dirección /home/usuario/Code o puedes colocarla donde prefieras.
+
+Para especificar la carpeta como el directorio donde Valet buscará los proyectos, ingresamos en ella desde la terminal o consola y escribimos el comando valet park, es decir:
+
+
+cd ~
+cd Code
+valet park
+1
+2
+3
+cd ~
+cd Code
+valet park
+De esta manera Valet, usará nuestra carpeta Code. Por último, vamos a iniciar los servicios de Valet con el comando:
+
+
+valet start
+1
+valet start
+Si todo va bien y has seguido los pasos de forma correcta debes recibir un mensaje como este: Valet services have been started.
+
+Uso del paquete
+Para demostrar el uso del paquete vamos a instalar Laravel para comprobar que Valet esté funcionando de forma correcta. Nos dirigimos a la carpeta que hemos definido para nuestros proyectos: Code, dentro de esa carpeta vamos a decirle a Composer que requerimos una nueva instalación de Laravel:
+
+
+composer create-project --prefer-dist laravel/laravel blog
+1
+composer create-project --prefer-dist laravel/laravel blog
+Una vez que se termine de instalar Laravel y todas las dependencias podemos abrir el navegador y dirigirnos a la dirección blog.dev donde vamos a poder observar el mensaje de bienvenida de un proyecto Laravel.
+
+En pocas palabras, cualquier proyecto de Laravel que se encuentre dentro de la carpeta en la que hicimos valet park se mostrará automáticamente en el navegador usando el dominio que sigue la convención http://nombre-carpeta.dev, es decir, si ahora creamos un nuevo proyecto en una carpeta llamada tienda tendremos disponible el dominio tienda.dev el cual apuntará hacia dicha carpeta.
+
+Soporte
+Por defecto el paquete nos ofrece soporte y configuración ya preparada para una lista de Frameworks y CMS:
+
+Laravel
+Lumen
+Symfony
+Zend
+CakePHP 3
+WordPress
+Bedrock
+Craft
+Statamic
+Jigsaw
+HTML estático
+Si deseas personalizar esta lista de drivers para agregar el tuyo puedes seguir la documentación oficial.
+
+¿Deseas cambiar el dominio?
+Con el siguiente comando podemos observar cuál es el dominio que estamos usando para nuestro proyectos:
+
+
+valet domain
+1
+valet domain
+Por defecto utiliza el dominio .dev, pero si deseamos cambiarlo podemos hacerlo con este comando de la siguiente forma:
+
+
+valet domain app
+1
+valet domain app
+Ahora no podemos acceder a nuestro proyecto con blog.dev sino que debemos hacerlo con blog.app, al realizar esta acción también se aplicaría para todos nuestros proyectos.
+
+Compartir nuestro proyecto en Internet
+Imaginemos por un momento que estamos trabajando en un desarrollo el cual nos gustaría mostrarle el estado del proyecto a un cliente, lo que quizás podríamos hacer sería configurar nuestro servidor para que puedan acceder con nuestra IP, además tendríamos que modificar un par de archivos más para que apunte a la carpeta public. Esto quizás suena un poco complicado y tedioso, con Valet podemos resumir esto a un solo comando, ya que con el comando:
+
+
+valet share
+1
+valet share
+Se nos asignará una dirección parecida a esta 26feba8b.ngrok.io  y con esta dirección las personas podrán acceder a nuestro proyecto de forma temporal, esto quiere decir que cuando dejemos de compartir el proyecto a Internet y lo volvamos a levantar tendremos una dirección diferente pero siempre con el dominio ngrok.io.
+
+Actualizar el paquete
+Si deseas actualizar el paquete a la última versión puedes hacerlo con este sencillo comando el cual le dirá a Composer que actualice todos los paquetes globales de nuestro sistema:
+
+
+composer global update
+1
+composer global update
+Mas información
+Si deseas conocer todos los comandos disponibles puedes ejecutar el comando:
+
+
+valet list
+1
+valet list
+Si quieres obtener más información sobre este paquete puedes visitar el repositorio del proyecto. Sin duda alguna Valet es una herramienta que todo desarrollador PHP debería tener en consideración, es muy simple y muy útil a su vez.
+
+Material relacionado
+Laravel Valet en Mac
+https://styde.net/laravel-valet/

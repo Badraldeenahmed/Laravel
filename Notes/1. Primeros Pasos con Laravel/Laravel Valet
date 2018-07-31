@@ -1,0 +1,81 @@
+   Laravel Valet
+    https://styde.net/laravel-valet/
+
+
+Luego de ver el video promocional, pensé que Valet se trataba de una broma. ¡Pero en realidad es increíble! Valet, es una alternativa muy ligera a Vagrant Homestead, y ofrece un entorno de desarrollo minimalista, sólo para usuarios de Mac.
+
+
+Valet se apoya en el PHP que trae tu Mac por defecto, para a través de éste y de DnsMasq, hacer que todas las peticiones a dominios que tengan la extensión .dev apunten a tus proyectos locales.
+
+Laravel Valet
+En la página oficial de Laravel, podemos leer algunos datos interesantes:
+
+Valet requiere aproximadamente 7 Mb. de RAM
+Es muy rápido y ligero
+Es una alternativa mas no un sustituto de una máquina virtual completa como la que provee Homestead y Vagrant.
+Valet soporta actualmente proyectos en Laravel, Lumen y Statamic, aunque es posible extenderlo para crear drivers personalizados.
+Requisitos
+Valet tienes los siguientes requisitos:
+
+Sistema operativo de Mac
+Brew
+Tener el puerto 80 libre (por ejemplo, asegúrate que no estás usando MAMP al mismo tiempo).
+Pasos para instalar Valet
+Instala Homebrew, o si ya lo tienes, asegúrate de tener la última versión con brew update.
+Asegúrate de que los servicios de Brew se están ejecutando con brew services list o agrégalos.
+Instala PHP 7 en Homebrew con brew install php70.
+En mi caso, el comando anterior lanzó un error y me sugirió ejecutar: brew install homebrew/php/php70-amqp. La documentación oficial de Laravel, sugiere incluir las siguientes fórmulas.
+Instala Valet vía Composer con composer global require laravel/valet
+Asegúrate de agregar Composer al PATH de tu sistema (Si trabajas con Laravel muy probablemente ya has hecho esto).
+Ejecuta el comando valet install. Este comando configurará e instalará Valet y DnsMasq, y finalmente registrará el “daemon” de Valet para que sea ejecutado apenas inicies tu sistema.
+Base de datos
+Para la base de datos, puedes instalar MariaDB ejecutando brew install mariadb en tu consola. Puedes conectarte a la base de datos con la dirección IP 127.0.0.1  utilizando root como nombre de usuario y con la clave vacía, (ejemplo: mysql -uroot).
+
+Ejecutando sitios
+Una vez que Valet esté instalado, ya estás listo para comenzar a probar tus sitios. Puedes usar los comandos park y link:
+
+El comando park
+
+Crea un nuevo directorio en tu mac, ejecutando algo como: mkdir ~/Sites  o utiliza el directorio donde actualmente guardas tus proyectos. Luego dirígete a dicha carpeta (cd ~/Sites) y ejecuta valet park. Este comando registrará tu directorio de trabajo como un path que Valet usará para buscar por sitios (cada carpeta dentro de Sites/ será un sitio)
+Ahora dentro de dicho directorio, puedes crear un nuevo sitio, por ejemplo: laravel new blog, o usa un sitio que ya hayas creado previamente
+¡Eso es todo! Ahora puedes simplemente abrir tu nuevo sitio en el navegador: http://blog.dev.
+De ahora en adelante todos los proyectos que crees en dicho directorio quedarán enlazados automáticamente a un dominio con la extensión .dev (recuerda, el nombre de tu carpeta será la primera parte del dominio).
+
+El comando link
+
+El comando link, puede ser usado también para servir tus sitios de Laravel. Este comando es útil si quieres servir un sólo sitio en un directorio y no el directorio completo (como sucede con el comando park).
+
+Para usar este comando, simplemente navega al proyecto que quieres enlazar y ejecuta valet link nombre-de-la-app. Valet creará un link simbólico a ~/.valet/Sites  que apuntará a tu directorio de trabajo. Puedes usar este comando para enlazar sitios que no estén en tu directorio principal de proyectos.
+Una vez que ejecutes este comando, ya puedes acceder a tu proyecto en el navegador con: http://nombre-de-la-app.dev.
+Puedes ver todos los sitios enlazados con el comando valet links .
+Puedes desenlazar sitios con valet unlink nombre-de-la-app .
+Compartir tus sitios en Valet con tus colegas
+Valet, incluye un comando para compartir tus sitios locales con tus compañeros de trabajo.
+
+Para compartir un sitio simplemente dirígete en la consola al directorio del proyecto (por ejemplo ~/Sites/blog) y luego ejecuta el comando valet share. Esto creará una URL pública que quedará en tu portapapeles y podrás pegar inmediatamente en el navegador o donde quieras.
+
+Para dejar de compartir un sitio, puedes presionar Control + C para cancelar el proceso.
+
+Ver logs
+Si algo sale mal mientras ejecutas tu proyecto de Laravel PHP (y algo saldrá mal), puedes ver los logs con el comando valet logs . Este comando mostrará nuevos logs automáticamente en tu consola.
+
+Otros comandos útiles
+Incluyen: valet start, stop, restart, forget (para olvidar todos los sitios), paths (para ver la ruta a tus proyectos), y finalmente uninstall si ya no quieres seguir usando Valet :'(
+
+Drivers personalizados
+Si eres un usuario avanzado y quieres crear tus propios drivers, puedes hacerlo siguiendo la documentación oficial.
+
+¡Comercial!
+Adam Wathan, co-autor de Valet, tiene mucho sentido del humor, como lo demuestra en el siguiente video, pero con o sin humor, Valet es increíble y yo ya lo estoy usando! Adiós MAMP y Homestead*.
+
+*Algunos proyectos aún requerirán de todo el poder y configuración de la máquina virtual.
+
+
+Únete a la discusión
+Regístrate en Styde y obtén una invitación a nuestro Slack.
+
+Aprovecha nuestra promoción activa y únete a Styde por menos de 10 USD al mes: ver planes semestral y anual.
+
+[ Video: Introducing Laravel Valet ]
+https://youtu.be/H3Z4Gk9Wc0s
+

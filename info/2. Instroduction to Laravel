@@ -72,11 +72,65 @@ thhe file htaccess
 
 </IfModule>
 
+With NGnx resolve index.php
+
+
+In the public directory the files of this directory will be public like css, js
+
+files of PHP the routes files, vendor files will we private.
+
+
+
+3. Re capituling
+
+All request from user will be procesed for this file index.php
+
+Here Laravel will be init the aolicacion, we generally does. But in some case Laravel will ask, now what can i do with the request user.
+
+a Form to explanin to Laravel what ca it do with each request Laravel uses
+routes folder
+
+/routes  
+
+Here we can manage the routes
+
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+
+We use get to resolve the route for home and we resolve with a file called welcome in 
+
+/resources/views/welcome.blade.php
+
+Blade is the template system of Laravel.
 
 
 
 
+4. We can change to other view and create another template from cero
 
+Now if i try to call other page for example
+
+http://127.0.0.1:8000/contacto
+
+We obtain an error 404
+
+
+Because this url doen't exist.
 
 
 

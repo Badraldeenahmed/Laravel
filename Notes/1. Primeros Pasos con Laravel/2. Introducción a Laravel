@@ -1,0 +1,59 @@
+Introducción a Laravel
+
+
+
+
+Laravel es un framework para el desarrollo de aplicaciones web con PHP que nos permite construir aplicaciones modernas con una sintaxis elegante y expresiva. Éste fue creado por Taylor Otwell en el 2011 y a la fecha de publicación de este curso va por la versión 5.5. Para empezar a trabajar con Laravel necesitas preparar tu entorno de desarrollo, IDE o editor de texto y otras herramientas como Composer que te ayudarán a instalar y desarrollar aplicaciones web con este framework. En esta lección, daremos una breve introducción al framework y aprenderás sobre el patrón de diseño Front Controller, el cual es usado por Laravel para procesar todas las peticiones que se hacen a la aplicación.
+
+Si la ruta del home / funciona pero ninguna otra y estás utilizando el Servidor Web Apache, asegúrate de tener instalado y habilitada la extensión mod_rewrite.
+
+Para instalar un nuevo proyecto de Laravel puedes hacerlo de 2 maneras: con el comando create-project de Composer o con el instalador laravel new como se explicó en la lección anterior.  Pero hay algo más que debes saber. El instalador de Laravel solo nos permite instalar la versión actual del framework (opción por defecto) y la versión en desarrollo con el comando laravel new mi-proyecto --dev
+
+Así que si quieres instalar Laravel en una versión que no sea la última versión, entonces debes usar el comando create-project que nos da la opción de poder especificar la versión que queremos usar. De esta manera:
+
+composer create-project laravel/laravel nombre-proyecto "5.5.*"
+
+    Con esto estaríamos instalando un proyecto de Laravel 5.5
+
+Si vas a empezar a seguir las lecciones de este curso te recomendamos que instales la versión 5.5 para que puedas reproducir los ejemplos tal cual como están en el video. No te preocupes, si hay una versión posterior de Laravel nosotros te proporcionaremos las lecciones y notas para que aprendas las pequeñas diferencias entre una y otra.
+
+El uso de un sistema de control de versiones como Git es primordial cuando quieres desarrollar de manera profesional. Para realizar este curso Git es opcional, pues solo se usará para compartir el código. Pero si quieres conocer más, en Styde.net tenemos un Curso de Git y GitHub.
+
+Por otro lado, algo clave para desarrollar eficientemente es tener un editor de texto o IDE bien configurado que nos facilite el trabajo de escribir el código de nuestra aplicación. Hay dos grandes grupos: IDE (Entorno de Desarrollo Integrado) y editores de texto. La diferencia principal es que los primeros vienen por defecto con múltiples herramientas como: autocompletado inteligente, resaltado de sintaxis, sistema de control de versiones, debugger, entre otras herramientas configuradas y listas para empezar a trabajar.  En cambio, los editores de texto son más ligeros y no vienen con todas las herramientas u opciones listas por defecto, sino que debes instalarlas y configurarlas por medio de plugins y extensiones.
+
+Entre los IDEs para PHP tenemos a: PHPStorm, Zend Studio, Eclipse, NetBeans, Aptana Studio, etc. Entre los editores de texto están: Sublime Text, Atom, Visual Studio Code, NotePad++, etc.  ¡Elige uno con el cual te sientas cómodo y comienza a desarrollar!
+
+En el video se está usando PHPStorm pero tu puedes usar cualquier IDE o editor de texto de tu preferencia. En Styde hemos publicado varios tutoriales que te pueden interesar:
+
+    Cómo mejorar la apariencia y funcionalidad de PhpStorm
+    https://styde.net/mejorar-la-apariencia-y-funcionalidad-de-phpstorm/
+
+    Cómo organizar el código en PhpStorm siguiendo el estándar PSR-2
+    https://styde.net/como-organizar-el-codigo-en-phpstorm-siguiendo-el-estandar-psr-2/
+
+    Como hacer debug usando Xdebug, PhpStorm y Homestead
+    https://styde.net/como-hacer-debug-usando-xdebug-phpstorm-y-homestead/
+
+    GitGutter para Sublime Text
+    https://styde.net/gitgutter-para-sublime-text/
+
+    PHP companion para Sublime Text 3}
+    https://styde.net/php-companion-para-sublime-text-3/
+
+    Instalar PHP Code Sniffer en Sublime Text
+    https://styde.net/instalar-php-code-sniffer-en-sublime-text/
+
+El patrón de diseño Front Controller consiste en que un solo componente de la aplicación es el responsable de manejar de todas las peticiones HTTP que ésta recibe. Es decir, hay un solo punto de acceso para todas las peticiones.
+
+En Laravel esta función la cumple el archivo index.php que se encuentra en el directorio public. junto con el archivo .htaccess. Pues que -cuando usas el servidor web Apache- este último archivo se encarga de redirigir todas las peticiones a index.php
+
+El directorio public contiene además, las imágenes, archivos CSS y de Javascript que será públicos para los usuarios y visitantes de la aplicación, el resto de archivos donde se encuentra la lógica de la aplicación es inaccesible para ellos, es decir, son privados.
+Material relacionado
+
+    Laravel Valet
+    https://styde.net/laravel-valet/
+
+    Instalación de Laravel Valet en Linux
+    https://styde.net/instalacion-de-laravel-valet-en-linux/
+
+    
