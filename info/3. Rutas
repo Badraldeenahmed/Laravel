@@ -1,0 +1,8 @@
+Para trabajar con Rutas iremos a la carpeta 
+
+routes/web.php
+
+we can coment the definition of routes, if we decide coment the principal route, en bowser we obtain un aeeror 404
+
+and defining the new route
+
