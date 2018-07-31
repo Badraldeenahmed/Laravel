@@ -1,0 +1,102 @@
+Instalación de Composer y Laravel
+https://styde.net/laravel-5/
+
+
+
+Curso de Laravel desde cero
+
+Para desarrollar aplicaciones de PHP con Laravel necesitamos primero instalar y configurar un conjunto de herramientas que nos facilitan el trabajo de creación de nuevas aplicaciones. Por un lado, requerimos tener un entorno de desarrollo en nuestro equipo que cumpla con los requerimientos del framework y por otro, es recomendable configurar y conocer las formas de acceder a una aplicación creada en dicho entorno. En esta primera lección te guiaremos para que prepares tu equipo y así empieces a desarrollar con Laravel.
+
+
+
+
+
+Curso de Laravel desde cero
+
+Para desarrollar aplicaciones de PHP con Laravel necesitamos primero instalar y configurar un conjunto de herramientas que nos facilitan el trabajo de creación de nuevas aplicaciones. Por un lado, requerimos tener un entorno de desarrollo en nuestro equipo que cumpla con los requerimientos del framework y por otro, es recomendable configurar y conocer las formas de acceder a una aplicación creada en dicho entorno. En esta primera lección te guiaremos para que prepares tu equipo y así empieces a desarrollar con Laravel.
+
+Email icon Suscríbete a nuestro boletín
+
+Te enviaremos publicaciones con consejos útiles y múltiples recursos para que sigas aprendiendo.
+Notas
+
+Por Clemir Rondón y Dimitri Acosta.
+Preparación del entorno de desarrollo
+
+Para desarrollar con Laravel 5.5 puedes hacerlo desde Windows, Linux o MacOs siempre que tengas un servidor web con PHP 7 o superior.
+
+A esto nosotros le llamamos entorno de desarrollo y existe una gran variedad de ellos, cada uno con un nivel de complejidad distinto al otro, desde el más básico instalando manualmente Apache o Nginx, PHP, MySQL, etc., así como instalar herramientas como XAMPP, WAMP, MAMP, etc., hasta otras más complicadas como Laravel Homestead
+
+Sin embargo, recomendamos las siguientes opciones para quienes estén iniciando, por su facilidad de instalación y uso:
+
+    En Windows puedes usar: Laragon, un entorno de desarrollo para Laravel en Windows
+    En Linux: Instalación de Laravel Valet en Linux
+    En MacOs: Laravel Valet
+
+Por otro lado, Laravel utiliza Composer para manejar sus dependencias. ¿Qué significa esto? Pues el framework Laravel hace uso de una colección de paquetes o componentes propios y de terceros para agregarle funcionalidades a las aplicaciones. Por tanto, necesitamos un gestor de dependencias que se encargue automáticamente de crear proyectos, instalar, actualizar o eliminar componentes y a su vez las dependencias de éstos. Esta herramienta es Composer, el manejador de dependencias de PHP.
+
+Instalarlo depende del sistema operativo que uses si es MacOs o Linux puedes seguir los pasos descritos en el video: descargar el archivo composer.phar con las instrucciones del sitio oficial y luego mover dicho archivo para que esté de forma global y así usar la herramienta desde cualquier directorio, siguiendo las instrucciones oficiales de Composer.
+
+Para Windows puedes descargar el instalador que ofrece Composer en su sitio web que se encargará de instalarlo para que lo puedas usar en cualquier parte del sistema. Si has decidido trabajar con Laragon no necesitas realizar esta instalación, puesto que viene incluido por defecto en este entorno de desarrollo.
+
+Puedes confirmar si tienes bien instalado Composer ejecutando en la consola desde cualquier directorio: composer y en caso de estar instalado, te mostrará un listado de todos los comandos disponibles.
+
+Para conocer cómo trabajar con Composer puedes ver nuestra serie Composer, el gestor de dependencias de PHP
+Instalación de Laravel
+
+Una vez listo el entorno de desarrollo, usaremos Composer para instalar Laravel de esta manera:
+
+composer create-project --prefer-dist laravel/laravel mi-proyecto
+
+Lo que significa que estamos creando un nuevo proyecto llamado mi-proyecto con el comando create-project de Composer a partir del paquete laravel/laravel, usando la opción --prefer-dist para que Composer descargue los archivos del repositorio de distribución.
+
+Hay una alternativa para instalar Laravel y es con su instalador, que también es un paquete, por tanto, también usaremos Composer para instalarlo de forma global con el comando:
+
+composer global require "laravel/installer"
+
+Luego, nos tenemos que asegurar que la variable de entorno PATH del sistema operativo tenga incluido el directorio donde se alojan los paquetes instalados globalmente y así se puedan ejecutar sin ningún problema, para ello debemos agregar su ruta:
+
+    Para MacOs y Linux la variable PATH la podemos definir en: ~/.bashrc o ~/.bash_profile donde la ruta a añadir al final de lo que tiene asignado la variable es: :$HOME/.composer/vendor/bin
+    Para Windows debes modificar la variable de entorno PATH para agregar la ruta ;C:\Users\tu-usuario\AppData\Roaming\Composer\vendor\bin
+
+Si quieres aprender a personalizar tu terminal y además a usarla eficientemente te invitamos a revisar nuestro Curso básico de terminal, donde aprenderás comandos básicos, gestión de paquetes, personalizarla con Oh My Zsh y sus plugins, entre otros temas.
+
+Bien, de esta manera ya tenemos disponible el instalador de Laravel, por tanto, podemos ejecutar desde cualquier directorio:
+
+laravel new nombre-proyecto
+
+y se instalará tal y como se hizo con el comando composer create-project.
+Abrir la aplicación creada
+
+Para ver y navegar por la aplicación recién creada podemos ejecutar el comando:
+
+php artisan serve
+
+Este comando ejecuta la aplicación en un servidor de desarrollo incluido por defecto en Laravel.  Por tanto debemos hacer clic en la URL que nos muestra para explorar la aplicación en el navegador.  Para detener la ejecución presiona Ctrl + C
+
+Si estás usando el entorno de desarrollo Laravel Valet (tanto para Linux como para MacOs) o Laragon, estás herramientas crean un virtualhost por defecto por cada proyecto según el nombre de la carpeta.  Así para nuestro proyecto creado podemos visitar en el navegador http://mi-proyecto.dev y podrás ver la aplicación funcionando.
+
+También, si estás usando Apache puedes crear tus propios virtualhost revisando nuestro tutoriales:
+
+
+    Creando Virtual Hosts con Apache en Windows para WAMP o XAMPP
+    https://styde.net/creando-virtual-hosts-con-apache-en-windows-para-wamp-o-xampp/
+    Cómo crear Virtual Hosts con Apache para Linux y Mac
+    https://styde.net/como-crear-virtual-hosts-con-apache-para-linux-y-mac/
+
+Material relacionado
+
+    La documentación oficial de Laravel se encuentra en https://laravel.com/docs/5.5
+    https://laravel.com/docs/5.5
+    
+    Documentación oficial de Composer: https://getcomposer.org/doc/
+    https://getcomposer.org/doc/
+
+    Configurar oh-my-zsh en la terminal
+    https://styde.net/personalizacion-de-nuestro-terminal-con-iterm-y-oh-my-zsh/
+
+    Instalar Composer y Laravel en Windows
+    https://styde.net/instalacion-de-composer-y-laravel-en-windows/
+
+    Instalación y uso de componentes de terceros con Composer (Curso de Programación orientada a objetos con PHP)
+    https://styde.net/instalacion-y-uso-de-componentes-de-terceros-con-composer/

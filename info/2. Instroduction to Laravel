@@ -1,0 +1,82 @@
+Begin Creating a new project with composer 5.5 LTS
+
+# composer create-project laravel/laravel curso-styde "5.5.*"
+
+Init git 
+
+# git init
+
+# git add .
+
+# git commit -m "begining Project"
+
+# git push origin master
+
+
+1. Begining the project
+
+Laravel uses Front Controller patron to avoid spaguetti code
+
+Index.php
+
+All request arrive to index.php in 
+public/index.php
+
+
+For this case we use Laravel Vallet to create code with magic
+
+Vallet is available for Mac, Linux and Windows
+
+in index.php
+
+die($_SERVER['REQUEST_URI']);
+
+and in the browser
+
+http://127.0.0.1:8000/
+
+Represent home o the page of my project
+
+and we can use 
+urls like
+
+/contacto
+/home
+/portfolio
+
+This for the mod mod_rewrite of Apache
+
+thhe file htaccess
+
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+
+
+</IfModule>
+
+
+
+
+
+
+
+
+

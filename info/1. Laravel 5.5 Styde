@@ -1,0 +1,471 @@
+Hacks Laravel 5.5
+
+1. Verify PHP versión
+
+# php -v
+
+Must be version 7.1.x or latest
+
+
+2. Install composer
+
+	https://getcomposer.org/
+
+	Go to Download Composer
+		https://getcomposer.org/download/
+
+		Copy and eject this in Terminal
+
+		#	php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+			php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+			php composer-setup.php
+			php -r "unlink('composer-setup.php');"
+
+	Confirmation Message:
+	
+	Composer (version 1.6.5) successfully installed to: /var/www/html/dev/Laravel/composer.phar
+	Use it: php composer.phar
+
+	Composer is adding to actual folder
+
+
+	To use:
+	php composer.phar to exect
+
+3. Getting Started
+	https://getcomposer.org/doc/00-intro.md
+
+
+
+4. Sources
+	https://www.patreon.com/duiliopalacios
+	https://laravel.com/docs/5.5
+
+	https://styde.net/instalacion-de-composer-y-laravel/
+
+	https://styde.net/instalacion-de-laravel-valet-en-linux/
+	https://styde.net/composer-manejador-paquetes-php/
+
+
+
+5. Instalar composer from terminal
+	sudo apt install composer
+
+6. Verify instalation of Composer
+	# composer --version
+	Composer 1.6.3 2018-01-31 16:28:17
+
+7. 	To avoid write user pass for github acount, clone the porject with ssh method
+	https://blog.openalfa.com/como-evitar-que-git-solicite-usuario-y-contrasena-cada-vez
+	https://info-2-blog.blogspot.com/2015/12/evitar-que-git-te-pida-usuario-y.html
+	https://www.enmimaquinafunciona.com/pregunta/23230/como-garantizar-que-git-no-me-pregunta-por-mi-github-nombre-de-usuario-y-contrasena
+	http://eegirls.com/cmo-puedo-garantizar-que-git-no-me-solicite-mi-nombre-de-usuario-y-contrasea-github.html
+	https://github.com/torresj/IV-GII-13-14/wiki/Generar-clave-SSH-para-no-tener-que-meter-usuario-y-contrase%C3%B1a-cada-vez-en-Git
+
+
+8. Show list commands with composer
+	# php composer.phar
+
+9. 	The most common commands to use are this:
+	install
+	dump-autoload
+	create-project
+
+10. Instructions to begin use composer
+	https://getcomposer.org/doc/00-intro.md
+
+11. Install composer globally in Linux or Mac
+	Move the file donloaded to the directory
+
+	# sudo mv composer.phar /usr/local/bin/composer
+
+12. The instalation of Composer is finished and we can use composer fro any folder of the system
+
+13, To update composer (in some cases):
+	#composer update
+
+14. Now we can begin to create our first project with
+	Init Config for project
+	
+	https://laravel.com/docs/5.5#installation
+		Via Composer Create-Project
+	
+	# composer create-project --prefer-dist laravel/laravel blog "5.5.*"	
+	.
+	.
+	.
+	Package manifest generated successfully.
+	> @php artisan key:generate
+	Application key [base64:1cllIzRwS9ZzbZDuPL05H7QMS8eCxZ1WmLWFQmdSgGM=] set successfully.
+	
+	This is all to get a new project, to check it:
+
+	# ls 
+	# cd <name_project>
+
+15. We can use the commando to init development server
+	Local development server
+
+	#  php artisan serve
+	Laravel development server started: <http://127.0.0.1:8000>
+
+	That's all our first project in laravel 5.5
+
+	From this, we finish the installation
+
+16. Exist other form to install Laravel, through their installer
+	The installer is a component, so we download from composer
+	Via Laravel Installer
+
+	# composer global require "laravel/installer"
+
+	We nedd this component in global form to exec Laravel in any folder.
+
+	At finish, Make sure to place composer's system-wide vendor bin directory in your $PATH so the laravel executable can be located by your system. This directory exists in different locations based on your operating system; however, some common locations include:
+
+	- macOS: $HOME/.composer/vendor/bin
+
+	- GNU / Linux Distributions: $HOME/.config/composer/vendor/bin
+
+	Once installed, the laravel new command will create a fresh Laravel installation in the directory you specify. For instance, laravel new blog will create a directory named blog containing a fresh Laravel installation with all of Laravel's dependencies already installed:
+
+	# laravel new blog
+
+	https://styde.net/instalacion-de-composer-y-laravel/
+	07m57
+	https://laravel.com/docs/5.5#installation
+	
+
+	Composer
+	https://styde.net/composer-manejador-paquetes-php/
+
+
+Problems
+
+	# composer global require "laravel/installer"
+	Changed current directory to /home/klvst3r/.config/composer
+	Using version ^2.0 for laravel/installer
+	./composer.json has been created
+	Loading composer repositories with package information
+	Updating dependencies (including require-dev)
+	Your requirements could not be resolved to an installable set of packages.
+
+
+
+17. Solve problems
+
+Your requirements could not be resolved to an installable set of packages.
+
+  Problem 1
+    - laravel/installer v2.0.1 requires ext-zip * -> the requested PHP extension zip is missing from your system.
+    - laravel/installer v2.0.0 requires ext-zip * -> the requested PHP extension zip is missing from your system.
+    - Installation request for laravel/installer ^2.0 -> satisfiable by laravel/installer[v2.0.0, v2.0.1].
+
+
+18. Able require ext-zip
+
+Can't install laravel installer via composer 
+
+The error appears then I use this comment:
+
+composer global require "laravel/installer"
+
+Install the version respective to installed php version :
+
+# For php v7.0
+sudo apt-get install php7.0-zip
+
+# For php v7.1
+sudo apt-get install php7.1-zip
+
+# For php v7.2
+sudo apt-get install php7.2-zip
+
+verify version of PHP
+# php -version
+
+PHP 7.2.7-1+ubuntu18.04.1+deb.sury.org+1 
+
+References:
+https://stackoverflow.com/questions/46058457/cant-install-laravel-installer-via-composer/46058582
+
+
+
+19. Install missing package for PHP
+
+So apply:
+
+sudo apt-get install php7.2-zip	
+
+In some cases only will be apply:
+
+sudo apt-get install php-zip
+
+
+
+The config will be success
+Then:
+
+composer global require "laravel/installer"
+.
+.
+.
+Writing lock file
+Generating autoload files
+
+
+
+20. Now chek the path in our session:
+
+Copy this:
+
+$HOME/.config/composer/vendor/bin
+
+
+Changed current directory to /home/klvst3r/.config/composer
+
+
+The file to PATH is in
+
+~/.bash_profile
+
+Reference:
+http://maslinux.es/como-establecer-la-variable-path-en-linux/
+
+
+
+21. So we Create  a new file in ~
+
+touch ~/.bash_profile
+
+22. Edit the file created
+
+subl ~/.bash_profile
+
+Write the first part of the path writting in the file:
+
+export PATH=$HOME/.config/composer/vendor/bin
+
+
+En el vieo la ruta es:
+$HOME/.composer/vendor/bin
+
+But we need conserv and mantain the url existing path  so:
+
+export PATH=$HOME/.config/composer/vendor/bin:$PATH
+
+and we move composer an a file and we need that be inside in the PATH to can execute the command composer between others to exect in each place of our project, so we add this directory:
+
+/usr/local/bin
+
+Finaly
+export PATH=/usr/local/bin:$HOME/.config/composer/vendor/bin:$PATH 
+
+Save and exit
+
+Restart the console and we can use the laravel command 
+
+But in this case we doesn't use the bash file, other option is use something called omycshell
+
+
+23. Config of Oh my zsh
+
+is in other file:
+
+subl ~/.zshrc 
+
+
+
+Install Oh-my-zsh
+--------------------------
+
+First Install Zsh
+# sudo apt install zsh
+
+
+
+It is necesary install curl
+# sudo apt install curl
+
+
+Install Oh-My-ZSH
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+Cloning Oh My Zsh...
+Clonando en '/home/klvst3r/.oh-my-zsh'...
+.
+.
+.
+
+
+
+
+Finally write pass:
+
+Contraseña: 
+         __                                     __   
+  ____  / /_     ____ ___  __  __   ____  _____/ /_  
+ / __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \ 
+/ /_/ / / / /  / / / / / / /_/ /    / /_(__  ) / / / 
+\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/  
+                        /____/                       ....is now installed!
+
+
+Please look over the ~/.zshrc file to select plugins, themes, and options.
+
+p.s. Follow us at https://twitter.com/ohmyzsh.
+
+p.p.s. Get stickers and t-shirts at https://shop.planetargon.com.
+
+
+Then Reload the config
+
+
+The Config File
+Just like Bash has .bashrc, ZSH has .zshrc. It's the single file that contains the configuration options for the shell, and you can use it to set aliases and customize runtime behavior. As of now, you actually have a nice set of defaults thanks to Oh-My-ZSH, which set up the file during its installation.
+
+
+Changing Oh-My-ZSH Theme:
+Oh-My-ZSH has many themes comes pre-installed. You can take a look at https://wiki.github.com/robbyrussell/oh-my-zsh/themes to find a theme that you like. The link has screenshots of each theme. My favorite is agnoster.
+
+
+
+
+Guide of Install Used
+https://linuxconfig.org/learn-the-basics-of-the-zsh-shell
+
+References to Install ZShell
+https://medium.com/wearetheledger/oh-my-zsh-made-for-cli-lovers-installation-guide-3131ca5491fb
+https://lignux.com/que-es-un-alias-como-anadirlos-y-usarlos-bash-y-zsh/
+https://linuxhint.com/install_zsh_shell_ubuntu_1804/
+https://www.howtoforge.com/tutorial/how-to-setup-zsh-and-oh-my-zsh-on-linux/
+https://www.solvetic.com/tutoriales/article/4457-como-instalar-configurar-zsh-oh-my-zsh-linux/
+
+
+Oh-My-Zsh! A Work of CLI Magic — Tutorial for Ubuntu
+https://medium.com/wearetheledger/oh-my-zsh-made-for-cli-lovers-installation-guide-3131ca5491fb
+
+--------------------------------------------------------------
+Installation Guide
+I’m performing this installation guide on my Ubuntu 16.04 Virtual Machine. To show you the underlying power of Oh-My-Zsh, I will install the Git plugin (Git-core). This plugin gives visual feedback about the Git status of a project.
+
+Install prerequisite packages
+$ sudo apt install git-core zsh
+Install Oh-My-Zsh from Robby Russell’s repository
+$ sh -c “$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+Install the Powerline font to spice up your CLI with icons
+$ sudo apt install fonts-powerline
+Change theme from ‘robbyrussell’ to ‘agnoster’ for the legendary Oh-My-Zsh theme
+$ nano ~/.zshrc
+Find the ZSH_THEME variable and change it:ZSH_THEME="agnoster"
+I don’t like it that the theme shows my username and host. To get rid of this, we change the directory to 
+$ cd ~/.oh-my-zsh/themes
+Next we open the theme file for ‘agnoster’ in the editor 
+$ nano agnoster.zsh-theme
+Now we can change the ‘Main prompt’. We don’t need to prompt_context in the function build_prompt(). Just comment out this line or remove it. At last, change the PROMPT variable to $(build_prompt).
+
+Agnoster theme configuration
+To actually see the theme, you have to source your .zshrc file like this: source ~/.zshrc. If everything worked out fine, you should see something like the cover image!
+
+Extra: Set zsh as our default shell. Execute this in your default shell, in most cases this will be bash. If you execute this command in zsh, it won’t change anything:
+$ chsh -s $(which zsh)
+
+Note: If you use sudo it will change the shell for root, but not for your working user.
+
+Install Plugins
+All plugins listed on the plugins Github page are pre-installed with Oh-My-Zsh at ~/.oh-my-zsh/plugins. Custom plugins can be installed at ~/.oh-my-zsh/custom/plugins. To use a plugin, you can simply add it to the plugins list in your ~/.zshrc file. Add wisely, as too many plugins slow down shell startup. Leave a blank between each plugin.
+
+
+Colored-man-pages
+In this example, I’ve installed a useful plugin to give color highlighting to your man pages . To be able to use the plugin, source your .zshrcfile: 
+$ source ~/.zshrc
+
+
+Colored Man Page of ls command
+Zsh-syntax-highlighting
+Another great plugin is syntax highlighting for your shell. Besides that, this plugin has the capability to verify the correctness of your command.
+
+
+This plugin isn’t installed with Oh-My-Zsh. Navigate to ~/.oh-my-zsh/custom/plugins and clone the code from Github into this folder:
+$ git clone https://github.com/zsh-users/zsh-syntax-highlighting
+
+You will see a folder named zsh-syntax-highlighting. This is the name that needs to be added to the plugins list.
+
+Zsh-autosuggestions
+You can also use zsh-autosuggestions for command completion. It suggests commands based on your command history. Very useful! To select the proposed command, press the right arrow key.
+
+
+Installation is the same as with zsh-syntax-highlighting : 
+$ git clone https://github.com/zsh-users/zsh-autosuggestions
+And add zsh-autosuggestions to the plugins list.
+--------------------------------------------------------------
+
+
+https://styde.net/instalacion-de-composer-y-laravel/
+09m25
+
+
+Useful Links and Sources
+This article was made with the help of TheLedger.
+
+Install OK
+https://linuxconfig.org/learn-the-basics-of-the-zsh-shell
+
+Oh-My-Zsh: http://ohmyz.sh/
+Plugins: https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins
+Themes: https://github.com/robbyrussell/oh-my-zsh/tree/master/themes/
+Git plugin with all aliases: https://github.com/robbyrussell/oh-my-zsh/wiki/Plugin:git
+Customizing your shell prompt: http://www.nparikh.org/unix/prompt.php#zsh
+ArchWiki about Zsh: https://wiki.archlinux.org/index.php/zsh#Autostart_X_at_login
+Zsh syntax highlighting plugin: https://github.com/zsh-users/zsh-syntax-highlighting
+Zsh autosuggestions plugin: https://github.com/zsh-users/zsh-autosuggestions
+RobbyRussell Wiki about customization of Zsh: https://github.com/robbyrussell/oh-my-zsh/wiki/Customization
+
+
+24.Continue to config Oh My .zshrc
+
+subl ~/.zshrc
+
+En the firs line we have
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+and we should change for:
+
+# export PATH=$HOME/bin:/usr/local/bin:~/.config/composer/vendor/bin:$PATH
+
+Whit this we should be able to load laravel from any folder
+
+
+
+If not
+
+try load
+
+# source ~/.zshrc
+
+
+That's all now we can loan laravel from any directory
+
+25. Loan new server */ project
+
+And we can 
+
+# laravel new mi_project
+
+The instalatacion was successful
+
+and we can load server
+
+cd mi-proyecto-2
+
+php artisan serve
+
+and in the browser
+
+http://127.0.0.1:8000
+
+Now we are ready to begin to program in Laravel
+
+
+
+
+
