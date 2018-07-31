@@ -23,3 +23,7 @@ Route::get('/', function (){
 Route::get('/usuarios', function(){
 	return 'Usuarios';
 });
+
+Route::get('/usuarios/detalles', function(){
+	return 'Mostrando detalle del usuario: ' . $_GET['id'];
+});
