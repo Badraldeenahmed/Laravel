@@ -1,0 +1,85 @@
+
+Pruebas con Laravel
+
+
+
+En la lección anterior donde aprendimos cómo escribir las primeras rutas de nuestra aplicación, utilizamos el navegador para probar dichas rutas y URLs. El problema de estas pruebas en el navegador es que no perduran en el tiempo ni pueden ejecutarse de forma rápida / automática. Así que hoy veremos cómo podemos probar el código que desarrollemos de forma más inteligente, utilizando el componente de pruebas automatizadas que viene incluido con Laravel.
+
+Directorio de pruebas
+
+Laravel incluye en el directorio principal de tu proyecto un directorio llamado /tests. En este directorio vamos a escribir código que se va a encargar de probar el código del resto de la aplicación. Este directorio está separado en dos subdirectorios:
+
+    El directorio Feature donde escribimos pruebas que emulan peticiones HTTP al servidor.
+    El directorio Unit donde escribimos pruebas que se encargan de probar partes individuales de la aplicación (como clases y métodos).
+
+Escribiendo una prueba
+
+En la siguiente prueba simularemos una petición HTTP GET a la URL del módulo de usuarios. Con asserStatus comprobamos que la URL carga de forma correcta verificando que el status HTTP sea 200. Con el método assertSee comprobamos que podemos ver el texto “Usuarios”:
+/** @test */
+function it_loads_the_users_list_page() 
+{
+  $this->get('/usuarios')
+    ->assertStatus(200)
+    ->assertSee('Usuarios');
+}
+1
+2
+3
+4
+5
+6
+7
+	
+/** @test */
+function it_loads_the_users_list_page() 
+{
+  $this->get('/usuarios')
+    ->assertStatus(200)
+    ->assertSee('Usuarios');
+}
+
+Para que PHPUnit ejecute el método como una prueba, debes colocar la anotación /** @test */ antes de la declaración del método o colocar el prefijo test_ en el nombre del método como tal:
+function test_it_loads_the_users_list_page
+{
+  //...
+}
+1
+2
+3
+4
+	
+function test_it_loads_the_users_list_page
+{
+  //...
+}
+
+De lo contrario el método NO será ejecutado como una prueba, lo cual es útil porque nos permite agregar métodos helpers dentro de nuestra clase de pruebas.
+Notas
+
+    El comando para generar nuevas pruebas es php artisan make:test NombreDeLaPruebaTest
+    Puedes ejecutar las pruebas con vendor/bin/phpunit o crear un alias para la consola.
+    https://styde.net/alias-de-comandos-para-la-consola-windowslinuxmac/
+
+    Puedes leer sobre los métodos de aserciones disponibles en la documentación de Laravel.
+    https://laravel.com/docs/5.5/http-tests#available-assertions
+
+Ejercicio
+
+Crea una ruta, con su prueba correspondiente para editar usuarios (la URL debería tener el formato /usuarios/{ID del usuario aquí}/edit).
+
+Desafío adicional: La ID sólo debería aceptar enteros y deberías escribir una prueba para comprobar que la URL /usuarios/texto/edit no es válida.
+Material Relacionado
+
+    Alias de comandos para la consola Windows/Linux/Mac
+    https://styde.net/alias-de-comandos-para-la-consola-windowslinuxmac/
+
+    Curso de programación orientada a objetos con PHP:
+    https://styde.net/curso-de-programacion-orientada-a-objetos-con-php/
+
+    Aprende cómo escribir pruebas unitarias con la lección Desarrollo de clases y métodos con pruebas automatizadas
+    https://styde.net/desarrollo-de-clases-y-metodos-con-pruebas-automatizadas/
+    
+    Aprende cómo encadenar métodos en la lección sobre Constructores semánticos e interfaces fluidas
+    https://styde.net/named-constructors-and-fluent-interfaces/
+
+
