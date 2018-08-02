@@ -4,5 +4,55 @@ routes/web.php
 
 we can coment the definition of routes, if we decide coment the principal route, en bowser we obtain un aeeror 404
 
-and defining the new route
+and defining the new route and in case of an a view we return an string 
 
+Route::get('/', function (){
+    return 'Home';
+});
+
+Route::get('/usuarios', function(){
+    return 'Usuarios';
+});
+
+Route::get('/usuarios/{id}', function($id){
+    return "Mostrando detalle del usuario: {$id}";
+})->where('id','[0-9]+');
+
+//Creating Users
+Route::get('/usuarios/nuevo', function(){
+    return 'Creando nuevo usuario';
+});
+
+
+Script Completo
+Route::get('/', function (){
+    return 'Home';
+});
+
+Route::get('/usuarios', function(){
+    return 'Usuarios';
+});
+
+
+//Creating Users
+////usuarios/nuevo
+Route::get('/usuarios/nuevo', function(){
+    return 'Creando nuevo usuario';
+});
+
+//usuarios/nuevo != usuarios/[0-9]+
+// Forma 1: ->where('id','[0-9]+');
+// Forma 2: ->where('id','\d+');
+// Forma 3, Letras y numeros: ->where('id','\w+');
+Route::get('/usuarios/{id}', function($id){
+    return "Mostrando detalle del usuario: {$id}";
+});
+
+
+Route::get('/saludo/{name}/{nickname?}', function($name, $nickname = null){ 
+    if ($nickname){
+        return "Bienvenido {$name}, tu nombre clave es: {$nickname}"; 
+    }else{ 
+        return "Bienvenido {$name}, No hay nombre clave";
+    }
+ } );

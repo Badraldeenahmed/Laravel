@@ -40,3 +40,11 @@ Route::get('/usuarios/{id}', function($id){
 });
 
 
+Route::get('/saludo/{name}/{nickname?}', function($name, $nickname = null){ 
+	if ($nickname){
+		return "Bienvenido {$name}, tu nombre clave es: {$nickname}"; 
+	}else{ 
+		return "Bienvenido {$name}, No hay nombre clave";
+	}
+ } );
+
