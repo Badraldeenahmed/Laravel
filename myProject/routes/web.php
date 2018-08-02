@@ -41,15 +41,14 @@ Route::get('/usuarios/nuevo', function(){
 
 
 
-
-
-
-
 Route::get('/saludo/{name}/{nickname?}', function($name, $nickname = null){ 
+
+	$name = ucfirst($name);
+
 	if ($nickname){
 		return "Bienvenido {$name}, tu nombre clave es: {$nickname}"; 
 	}else{ 
-		return "Bienvenido {$name}, No hay nombre clave";
+		return "Bienvenido {$name}";
 	}
  } );
 
