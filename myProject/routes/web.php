@@ -28,8 +28,9 @@ Route::get('/usuarios', function(){
 //Creating Users
 ////usuarios/nuevo
 Route::get('/usuarios/nuevo', function(){
-	return 'Creando nuevo usuario';
+	return 'Crear nuevo usuario';
 });
+
 
 //usuarios/nuevo != usuarios/[0-9]+
 // Forma 1: ->where('id','[0-9]+');
@@ -38,6 +39,9 @@ Route::get('/usuarios/nuevo', function(){
 Route::get('/usuarios/{id}', function($id){
 	return "Mostrando detalle del usuario: {$id}";
 });
+
+
+
 
 
 Route::get('/saludo/{name}/{nickname?}', function($name, $nickname = null){ 

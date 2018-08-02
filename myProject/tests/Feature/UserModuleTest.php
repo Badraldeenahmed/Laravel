@@ -29,5 +29,12 @@ class UserModuleTest extends TestCase
     	->assertSee('Mostrando detalle del usuario: 5');
     }
 
-    
+    /**
+     * @test
+     */
+    function it_loads_the_new_users_page(){
+    	$this->get('/usuarios/nuevo')
+    	->assertStatus(200)
+    	->assertSee('Crear nuevo usuario');
+    }
 }
