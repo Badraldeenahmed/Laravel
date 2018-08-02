@@ -1,0 +1,89 @@
+Pruebas con Laravel
+https://styde.net/pruebas-con-laravel/
+
+Las pruebas garantizan el funcionamiento de nuestros proyectos durante la construccion del mismo o en un futuro con las caracteristicas de algun metodo o accion realizada.
+
+Se tiene un directorio llama tests para generar las pruebas simulando peticiones al servidor o bien pruebas de metodos o caracteristicas especificas.
+
+El comando para ejecutar las pruebas es: 
+
+vendor/bin/phpunit
+
+se puede definir un alias
+
+alias t=vendor/bin/phpunit
+
+Ejecutando solamente 
+$ t
+
+para ejecutar las pruebas incluso de puede ejecutar las pruebas directamente desde el editor
+
+Lo que hace es que Laravel y PHP recorre todas las clases en nuestro directorio test que tengan el subfijo test y va a ejecutar las pruebas en cada uno de estos metodos, como ejemplo tenemos un metodo llamado "ExampleTest" que ejecutara el codigo
+
+ $response = $this->get('/');
+
+$response->assertStatus(200);
+
+Que es una peticion a la url de home yluego va a comprobar al hacer esto y comprobara que llega al estado 200 
+
+Que quiere decir que la url existe y cargo correctamente 
+
+Si por ejemplo cambiamos el codigo de la url
+/ a /home y correomos una prueba nos devolvera un error y advertencia mismo que sucede en el navegador con un error 404 el cual indica que a url ya no existe.
+
+ Para ello ejecutare:
+
+ $ php artisan make:test UsersModuleTest
+
+ La prueba para el modulo de usuarios,  creando una nueva clase de prueba 
+
+ /test/Feature/UserModuleTest.php
+
+ Tenioendo con esto el codigo:
+
+  public function testExample()
+    {
+        //$this->assertTrue(true);
+        $this->get('/usuarios')
+        ->assertStatus(200)
+        ->assertSee('Usuarios');
+    }
+
+    que comprobara el texto usurios, sin la generación de errores.
+
+    Haemos que el mensaje sea mas descriptivo.
+
+
+Generamos una prueba para la ruta de ejemplo, que perimite darle la bienvenida a usuarios 
+
+# php artisan make:test WelcomeUserTest
+ 
+
+ En el editor generamos dos metodos uno para los que tienen nickname y otros
+
+
+ class WelcomeUsersTest extends TestCase
+{
+    /**
+     * @test
+     */
+     function it_welcomes_users_with_nickname()
+    {
+        $this->get('saludo/patron/klvst3r')
+        ->assertStatus(200)
+        ->assertSee('Bienvenido Patron, tu nickname es: Klvst3r');
+    }
+
+    /**
+     * @test
+     */
+	 function it_welcomes_users_without_nickname()
+    {
+       	$this->get('saludo/patron')
+        ->assertStatus(200)
+        ->assertSee('Bienvenido Patron');
+    }
+
+
+Las pruebas unitarias se veran mas adelante.
+
