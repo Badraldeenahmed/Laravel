@@ -24,6 +24,14 @@ Route::get('/usuarios', function(){
 	return 'Usuarios';
 });
 
+//usuarios/nuevo != usuarios/[0-9]+
+// Forma 1: ->where('id','[0-9]+');
+// Forma 2: ->where('id','\d+');
+// Forma 3, Letras y numeros: ->where('id','\w+');
+Route::get('/usuarios/{id}', function($id){
+	return "Mostrando detalle del usuario: {$id}";
+})->where('id','[0-9]+');
+
 
 //Creating Users
 ////usuarios/nuevo
@@ -32,13 +40,6 @@ Route::get('/usuarios/nuevo', function(){
 });
 
 
-//usuarios/nuevo != usuarios/[0-9]+
-// Forma 1: ->where('id','[0-9]+');
-// Forma 2: ->where('id','\d+');
-// Forma 3, Letras y numeros: ->where('id','\w+');
-Route::get('/usuarios/{id}', function($id){
-	return "Mostrando detalle del usuario: {$id}";
-});
 
 
 
