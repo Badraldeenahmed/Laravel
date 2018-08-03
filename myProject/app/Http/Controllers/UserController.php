@@ -18,13 +18,16 @@ class UserController extends Controller
     		'Bill',
     	];
 
+    	$title = 'Listado de usuarios';
+
     	//$users = User::all();
     	/*return view('users', [
     		'users' => $users
 		]);*/
-		return view('users')->with([
-   		 'users' => $users
-		]);
+		/*return view('users')
+		    ->with('users', $users)
+		    ->with('title', 'Listado de usuarios');*/
+		return view('users', compact('users', 'title'));
 
     }
 
