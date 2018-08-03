@@ -1,0 +1,167 @@
+Controladores en Laravel
+https://styde.net/controladores-en-laravel/
+
+La logica de las rutas se ha hecho directamente en el archivo de rutas, y por logica solo retornan una cadena de texto, excepto una donde esxiste un condicional, el archivo de rutas ya no esta tan limpio, y creciendo el projecto podria crecer hasta tener miles de lineas de codigo, 
+
+La idea de utilizar Laravel es la de organizar mejor nuestro proyecto, no de escribir toda la ogica en un archivo.
+
+Laravel incluye una capa llamada controllers, los cuales son un mecanismo con el cual podremos agrupar peticiones http interrelacionadas organizadas en un clase y dividirlas en varios metodos.
+
+Para generar un nuevo controlador desde la terminal:
+
+# pho artisan make:controller <nombre_controlador>
+
+Generamos un controllador.
+
+# php artisan make:controller UserController 
+
+Creado en /app/Http/Controllers/UserController.php
+
+Este controlador no es mas que una clase de PHP 
+
+Siguiendo el patron PSR4, que es una convencion de nombres de clases, espacios, un nombre de espacio que es como el apellido de la clase, podemos tener dos clases con el mismo nombre.
+
+Dos personas se pueden llamar Pedro pero sin el nombe de espacio es decir dos personas diferentes.
+
+E la estructura si comenzamos eon el nombre de espacio, 
+
+nameSpace App
+
+Que representara clases dentro de la carpeta App y luego cada parte del nombre de espacio que va a represntar un subdirectorio.
+
+Se puede comprobar con el archivo 
+
+composer.json
+
+Se utiliza para manejar las dependencias del proyecto y tambien para cargar las clases, se puede ver en autoload que se puede mapear todas las clases que comienzen con el nombre App a la carpeta app
+
+Para el entorno de desarrollo test todas las clases que comiencen a la carpeta test.
+
+Asiq ue se agrega el primer metodo en el controlador.
+
+Podemos pasar el contenido de la funcion anonima de las rutas psando de:
+
+Route:get('/usuarios', function(){
+	
+});
+
+Route:get('/usuarios','UserController@index')
+
+Lo que hicimos es quitar la funcion anonima e indicar el nombre del controlador y el metodo al que esta apuntando la clase.
+
+Por lo tanto en el controlador tendremos:
+
+public function index(){
+    	return 'Usuarios';
+    }
+
+Vemos que los nombres de la clase coinciden.
+
+
+
+Asi en el controlador cargamos la logica
+
+class UserController extends Controller
+{
+    public function index(){
+    	return 'Usuarios';
+    }
+
+    public function show($id){
+    	return "Mostrando detalle del usuario: {$id}";
+    }
+
+    public function create(){
+    	return 'Crear nuevo usuario';
+    }
+
+
+y en las rutas indicamos que metodos deben ejecutarse
+
+
+
+Route::get('/usuarios', 'UserController@index');
+
+Route::get('/usuarios/{id}', 'UserController@show')
+->where('id','[0-9]+');
+
+Route::get('/usuarios/nuevo', 'UserController@create');
+
+
+Para ello debemos revisar de vez en cuando los logs del proyectos en:
+
+/storage/logs/laravel.log
+
+Como existe mucho contenido, podemos limpiarlo y volver a ejecutar las pruebas y volviendo a revisar el archivo de log para obtener mayor informacuión detalle del proyecto.
+
+Para poder descubrir el error 
+
+Existe otra forma de descubrir el error directamente dentro de la consola para ello hay que ir al metodo que esta fallando por ejemplo
+
+Abrirndo 
+test/Feature/UserModule.php
+
+En el metodo que esta fallando
+
+function it_welcomes_users_with_nickname()
+    {
+
+        $this->withoutExceptionHandling();
+
+        $this->get('saludo/patron/klvst3r')
+        ->assertStatus(200)
+        ->assertSee('Bienvenido Patron, tu nombre clave es: klvst3r');
+    }
+
+
+Esto nos dara mas información para poder localizar el error.
+
+Teniendo los cambios podemos regresar al navegador y poder utilizar las urls manualmente
+
+Seguimos creando otro controlador 
+
+php artisan make:controller WelcomeUserController
+
+Psndo de Routes hacia el controlador
+
+   public function index($name, $nickname = null){
+
+	$name = ucfirst($name);
+
+	if ($nickname){
+		return "Bienvenido {$name}, tu nombre clave es: {$nickname}"; 
+	}else{ 
+		return "Bienvenido {$name}";
+	}
+
+    }
+
+En las rutas lo asociamos al controlador
+
+Route::get('/saludo/{name}/{nickname?}', 'WelcomeUserController@index');
+
+Si queremos que el controlador solo tenga un metodo publico que represente una accion 
+
+En el controlador en cuestion y cambiar el nombre del motodo a invoque 
+
+Quedando
+    public function __invoke($name, $nickname = null){
+
+	$name = ucfirst($name);
+
+	if ($nickname){
+		return "Bienvenido {$name}, tu nombre clave es: {$nickname}"; 
+	}else{ 
+		return "Bienvenido {$name}";
+	}
+
+    }
+Esta forma nos permite llamar a este metodo como si se tratase de una funcion.
+
+Y en la ruta se cambia por     
+
+Route::get('/saludo/{name}/{nickname?}', 'WelcomeUserController
+
+
+
+

@@ -1,0 +1,112 @@
+Controladores en Laravel
+https://styde.net/controladores-en-laravel/
+
+Los controladores son un mecanismo que nos permite agrupar la lógica de peticiones HTTP relacionadas y de esta forma organizar mejor nuestro código. En esta quinta lección del Curso de Laravel desde cero aprenderemos a hacer uso de ellos y veremos además cómo las pruebas unitarias nos permiten verificar los cambios que introducimos en nuestro código de forma fácil y rápida.
+
+Generar un controlador
+
+Generamos un nuevo controlador con el comando de Artisan make:controller pasándole el nombre que queremos darle. En el ejemplo el nombre es UserController:
+php artisan make:controller UserController
+1
+	
+php artisan make:controller UserController
+
+Hecho esto, en el directorio app/Http/Controllers tendremos nuestro controlador UserController.
+Métodos en el controlador
+
+Un controlador no es más que un archivo .php con una clase que extiende de la clase App\Http\Controllers\Controller:
+<?php
+
+namespace App\Http\Controllers;
+
+class UserController extends Controller {
+     // ...
+}
+1
+2
+3
+4
+5
+6
+7
+	
+<?php
+ 
+namespace App\Http\Controllers;
+ 
+class UserController extends Controller {
+     // ...
+}
+
+Extender de la clase Controller es opcional, sin embargo es recomendado porque nos brindará varios métodos útiles que veremos más adelante.
+
+Dentro de esta clase (en nuestro caso UserController) agregamos nuestros métodos públicos (llamados acciones), que después podemos enlazar a una ruta:
+public function index()
+{
+    return 'Usuarios';
+}
+1
+2
+3
+4
+	
+public function index()
+{
+    return 'Usuarios';
+}
+
+Enlazar una ruta a un controlador
+
+Para enlazar una ruta a un controlador pasamos como argumento el nombre del controlador y del método que queremos enlazar, separados por un @. En este caso queremos enlazar la ruta /usuarios al método index del controlador UserController:
+Route::get('/usuarios', 'UserController@index');
+1
+	
+Route::get('/usuarios', 'UserController@index');
+
+Controlador de un solo método
+
+Si quieres tener un controlador que solo tenga una acción, puedes hacerlo llamando al método __invoke, por ejemplo:
+public function __invoke($name, $nickname = null)
+{
+    // ...
+}
+1
+2
+3
+4
+	
+public function __invoke($name, $nickname = null)
+{
+    // ...
+}
+
+En nuestra ruta ahora podemos enlazar directamente al controlador:
+Route::get('/saludo/{name}/{nickname}', 'WelcomeUserController');
+1
+	
+Route::get('/saludo/{name}/{nickname}', 'WelcomeUserController');
+
+Detectar errores en las pruebas
+
+En la lección te enseñé una manera rápida en que puedes “revelar” errores de programación dentro de las pruebas. Más adelante puedes ver la lección Manejo de excepciones en las pruebas en Laravel 5.5 
+(https://styde.net/manejo-de-excepciones-en-las-pruebas-en-laravel-5-5/)
+para aprender más sobre el tema. Recuerda que también puedes abrir el navegador para ver los errores como expliqué en Instalación de Laravel 5.5 (https://styde.net/instalacion-de-laravel-5-5-y-componente-whoops/)y el regreso del componente Whoops. La idea es que combines pruebas automatizadas y manuales para verificar el funcionamiento del código que estás desarrollando de manera oportuna.
+Material Relacionado
+
+Aprende más con nuestro Curso de programación orientada a objetos con PHP:
+
+    Autocarga de clases y nombres de espacio con PHP
+    https://styde.net/autoload-namespaces-php/
+
+    Autocarga de clases con Composer y PSR-4
+    https://styde.net/autocarga-de-clases-con-composer-y-psr-4/
+
+    Uso de los métodos mágicos __toString y __invoke en PHP
+    https://styde.net/uso-de-los-metodos-magicos-__tostring-y-__invoke-en-php/
+
+
+Ejercicios
+
+Mueve el código de la ruta para editar usuarios que creaste en el ejercicio de la lección pasada, a una nueva acción edit dentro de UserController. Utiliza una prueba automatizada para verificar que has hecho el cambio correctamente.
+
+Desafío adicional: divide la ruta de saludo en 2 rutas diferentes que apunten a 2 acciones diferentes, para de esta manera eliminar la necesidad de un condicional y el parámetro opcional. Utiliza la prueba automatizada para verificar que has hecho el cambio correctamente.
