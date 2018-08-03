@@ -20,17 +20,18 @@ Route::get('/', function (){
 	return 'Home';
 });
 
-Route::get('/usuarios', function(){
-	return 'Usuarios';
-});
+Route::get('/usuarios', 'UserController@index');
 
 //usuarios/nuevo != usuarios/[0-9]+
 // Forma 1: ->where('id','[0-9]+');
 // Forma 2: ->where('id','\d+');
 // Forma 3, Letras y numeros: ->where('id','\w+');
-Route::get('/usuarios/{id}', function($id){
+/*Route::get('/usuarios/{id}', function($id){
 	return "Mostrando detalle del usuario: {$id}";
-})->where('id','[0-9]+');
+})->where('id','[0-9]+');*/
+
+Route::get('/usuarios/{id}', 'UserController@show')
+->where('id','[0-9]+');
 
 
 //Creating Users
@@ -38,7 +39,6 @@ Route::get('/usuarios/{id}', function($id){
 Route::get('/usuarios/nuevo', function(){
 	return 'Crear nuevo usuario';
 });
-
 
 
 Route::get('/saludo/{name}/{nickname?}', function($name, $nickname = null){ 
