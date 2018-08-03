@@ -7,7 +7,22 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     public function index(){
-    	return 'Usuarios';
+
+    	
+    	$users = [
+    		'Klvst3r',
+		    'Joel',
+		    'Ellie',
+		    'Tess',
+    		'Tommy',
+    		'Bill',
+    	];
+
+    	//$users = User::all();
+    	return view('users', [
+    		'users' => $users
+		]);
+
     }
 
     public function show($id){
@@ -17,3 +32,5 @@ class UserController extends Controller
     public function create(){
     	return 'Crear nuevo usuario';
     }
+
+}
