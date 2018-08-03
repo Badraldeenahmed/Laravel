@@ -36,19 +36,11 @@ Route::get('/usuarios/{id}', 'UserController@show')
 
 //Creating Users
 ////usuarios/nuevo
-Route::get('/usuarios/nuevo', function(){
+/*Route::get('/usuarios/nuevo', function(){
 	return 'Crear nuevo usuario';
-});
+});*/
+Route::get('/usuarios/nuevo', 'UserController@create');
 
 
-Route::get('/saludo/{name}/{nickname?}', function($name, $nickname = null){ 
-
-	$name = ucfirst($name);
-
-	if ($nickname){
-		return "Bienvenido {$name}, tu nombre clave es: {$nickname}"; 
-	}else{ 
-		return "Bienvenido {$name}";
-	}
- } );
+Route::get('/saludo/{name}/{nickname?}', 'WelcomeUserController');
 
