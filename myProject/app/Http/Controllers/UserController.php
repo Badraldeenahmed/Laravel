@@ -19,8 +19,11 @@ class UserController extends Controller
     	];
 
     	//$users = User::all();
-    	return view('users', [
+    	/*return view('users', [
     		'users' => $users
+		]);*/
+		return view('users')->with([
+   		 'users' => $users
 		]);
 
     }
