@@ -1,0 +1,72 @@
+Vistas en Laravel
+
+Para no mostrar solaente cadenas de texto, el proyecto debe retornar paginas completas html y lograr esto con Laravel es a traves de la cpa de vistas y nuestras vistas estan dentro del directorio 
+
+/resources/views
+
+Crear una vista solo es creando un archivo ej.
+
+users.php
+
+Dentro de este archivo escribimos el html  
+
+Se crea un archivo dentro:
+
+y con codigo HTMl se inicia.
+
+para llamarlo en el archivo
+
+UserController.php
+
+se invoca de la siguiente manera
+
+public function index(){
+    	return view('users')
+    }
+
+
+Pasamos el helper con un parametro del nombre de la vista .
+
+Vamos visualizar los datos del ORM de Laravel con
+
+$users = User::all();
+
+Por ahora en lugar de comunicarme con un modelo, y configurar la base de datos simplemente utilizaremos un arreglo estatico,     
+
+public function index(){
+
+    	
+    	$users = [
+    		'Klvst3r',
+		    'Joel',
+		    'Ellie',
+		    'Tess',
+    		'Tommy',
+    		'Bill',
+    	];
+
+    	//$users = User::all();
+    	return view('users', [
+    		'users' => $users
+		]);
+
+    }
+
+ambién podemos usar el método with encadenándolo al llamado a la función view para pasar datos a la vista en formato de array asociativo:
+return view('users')->with([
+    'users' => $users
+]);
+
+return view('users')->with([
+    'users' => $users
+]);
+
+Con with también podemos pasar las variables de forma individual:
+PHP
+return view('users')
+    ->with('users', $users)
+    ->with('title', 'Listado de usuarios');
+	
+return view('users')
+    ->with('users', $users)
+    ->with('title', 'Listado de usuarios');    
