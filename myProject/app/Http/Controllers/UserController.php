@@ -25,11 +25,19 @@ class UserController extends Controller
     	/*return view('users', [
     		'users' => $users
 		]);*/
-		return view('users')
+		/*return view('users')
 		    ->with('users', $users)
-		    ->with('title', 'Listado de Usuarios');
+		    ->with('title', 'Listado de Usuarios');*/
 		
-		//return view('users', compact('users', 'title'));
+		//Similar tu publish vith var_dump, print asociative array
+		/*var_dump(compact('title', 'users'));
+		die();*/
+
+		//helper de LAravel dd
+		dd(compact('title', 'users'));
+
+		//convert in asociative array
+		return view('users', compact('users', 'title'));
 
     }
 
