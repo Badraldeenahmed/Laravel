@@ -25,10 +25,11 @@ class UserController extends Controller
     	/*return view('users', [
     		'users' => $users
 		]);*/
-		/*return view('users')
+		return view('users')
 		    ->with('users', $users)
-		    ->with('title', 'Listado de usuarios');*/
-		return view('users', compact('users', 'title'));
+		    ->with('title', 'Listado de Usuarios');
+		
+		//return view('users', compact('users', 'title'));
 
     }
 

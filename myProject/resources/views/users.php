@@ -5,7 +5,7 @@
 	<title>Listado de Usuarios - Klvst3r</title>
 </head>
 <body>
-	<h1>Usuarios</h1>
+	<h1><?php echo e($title) ?></h1>
 
 	<ul>
 	
