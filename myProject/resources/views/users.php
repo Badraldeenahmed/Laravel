@@ -10,7 +10,7 @@
 	<ul>
 	
 	<?php foreach($users as $user): ?>
-		<li><?php echo $user ?></li>
+		<li><?php echo e($user) ?></li>
 	<?php endforeach;  ?>
 
 	</ul>
