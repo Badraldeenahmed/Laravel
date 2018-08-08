@@ -1,0 +1,160 @@
+Blade, el Sistema de plantillas de Laravel
+
+Blade provee de muchas características que deberíamos tener en un lenguaje de plantillas, como por ejemplo la capacidad de escapar los datos de forma automática.
+
+Notas
+
+Para utilizar el sistema de plantillas de Laravel debemos renombrar nuestras vistas para que tengan la extensión .blade.php.
+Imprimir variables
+
+Si queremos imprimir una variable, podemos hacerlo utilizando la sintaxis de dobles llaves {{ }}
+<li>{{ $user }}</li>
+
+	
+<li>{{ $user }}</li>
+
+Ciclos y estructuras
+
+Si queremos utilizar ciclos y estructuras condicionales, podemos utilizar directivas. Las directivas de Blade van precedidas por un arroba (@) y luego el nombre de la directiva:
+@foreach ($users as $user)
+    <li>{{ $user }}</li>
+@endforeach
+ 
+	
+@foreach ($users as $user)
+    <li>{{ $user }}</li>
+@endforeach
+
+También podemos utilizar la directiva @if:
+@if (! empty($users))
+    ...
+@endif
+ 
+	
+@if (! empty($users))
+    ...
+@endif
+
+La directiva @if puede ser utilizada junto con un bloque else (utilizando @else):
+@if (! empty($users))
+    ...
+@else
+    <p>No hay usuarios registrados.</p>
+@endif
+ 
+	
+@if (! empty($users))
+    ...
+@else
+    <p>No hay usuarios registrados.</p>
+@endif
+
+Podemos utilizar la directiva @elseif, que como su nombre sugiere nos permite utilizar un bloque else if:
+@if (! empty($users))
+    ...
+@elseif ($users < 3)
+    <p>Hay menos de 3 usuarios registrados.</p>
+@else
+    <p>No hay usuarios registrados.</p>
+@endif
+ 
+	
+@if (! empty($users))
+    ...
+@elseif ($users < 3)
+    <p>Hay menos de 3 usuarios registrados.</p>
+@else
+    <p>No hay usuarios registrados.</p>
+@endif
+
+Blade también tiene la directiva @unless, que funciona como un condicional inverso:
+@unless (empty($users))
+    <ul>
+        @foreach ($users as $user)
+            <li>{{ $user }}</li>
+        @endforeach
+    </ul>
+@else
+    <p>No hay usuarios registrados.</p>
+@endunless
+ 
+	
+@unless (empty($users))
+    <ul>
+        @foreach ($users as $user)
+            <li>{{ $user }}</li>
+        @endforeach
+    </ul>
+@else
+    <p>No hay usuarios registrados.</p>
+@endunless
+
+En el ejemplo anterior queremos mostrar el listado de usuarios a no ser que la lista esté vacia. De lo contrario queremos mostrar el mensaje del bloque else.
+
+También podemos utilizar la directiva @empty que es una forma más corta de escribir @if (empty (...))
+@empty($users)
+    <p>No hay usuarios registrados.</p>
+@else
+    <ul>
+        @foreach ($users as $user)
+            <li>{{ $user }}</li>
+        @endforeach
+    </ul>
+@endempty
+
+	
+@empty($users)
+    <p>No hay usuarios registrados.</p>
+@else
+    <ul>
+        @foreach ($users as $user)
+            <li>{{ $user }}</li>
+        @endforeach
+    </ul>
+@endempty
+
+En este caso por supuesto invertimos los bloques dentro del condicional.
+
+Además de @foreach, también podemos utilizar @for:
+@for ($i = 0; $i < 10; $i++)
+    El valor actual es {{ $i }}
+@endfor
+
+	
+@for ($i = 0; $i < 10; $i++)
+    El valor actual es {{ $i }}
+@endfor
+
+Con la directiva @forelse podemos asignar una opción por defecto a un ciclo foreach sin utilizar bloques anidados:
+@forelse ($users as $user)
+    <li>{{ $user }}</li>
+@empty
+    <li>No hay usuarios registrados.</li>
+@endforelse
+
+	
+@forelse ($users as $user)
+    <li>{{ $user }}</li>
+@empty
+    <li>No hay usuarios registrados.</li>
+@endforelse
+
+Cuando utilizamos la sintaxis de dobles llaves Blade nos protege automáticamente de ataques XSS.
+Vistas en caché
+
+Laravel compila y guarda en caché nuestras vistas, por lo que usar el motor de plantillas Blade no afecta el rendimiento de nuestra aplicación. Puedes ver estas vistas compiladas en el directorio /storage/framework/views.
+
+Utilizando el comando view:clear podemos eliminar desde la terminal la vistas en caché:
+php artisan view:clear
+
+	
+php artisan view:clear
+
+Ejercicio
+
+En UserController asigna y crea vistas para las otras acciones y practica pasando datos a la vista.
+Material relacionado
+
+    Documentación oficial del motor de plantillas Blade (en inglés)
+	https://laravel.com/docs/5.5/blade
+	
