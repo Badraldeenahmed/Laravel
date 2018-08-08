@@ -34,7 +34,7 @@ class UserController extends Controller
 		die();*/
 
 		//helper de LAravel dd
-		dd(compact('title', 'users'));
+		//dd(compact('title', 'users'));
 
 		//convert in asociative array
 		return view('users', compact('users', 'title'));

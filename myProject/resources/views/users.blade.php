@@ -5,14 +5,15 @@
 	<title>Listado de Usuarios - Klvst3r</title>
 </head>
 <body>
-	<h1><?= e($title) ?></h1>
+	<h1>{{ $title }}</h1>
 
 	<ul>
 	
-	<?php foreach($users as $user): ?>
-		<li><?= e($user) ?></li>
-	<?php endforeach;  ?>
-
+	@foreach ($users as $user) 
+		<li>{{ $user }}</li>
+	@endforeach
 	</ul>
+
+
 </body>
 </html>
