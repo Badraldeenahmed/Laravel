@@ -7,21 +7,13 @@
 <body>
 	<h1>{{ $title }}</h1>
 	<hr>
-
-	@empty($users)
-
-		<p>No hay Usuarios Registrados.</p>
-	@else 
-
-		<ul>
-		
-		@foreach ($users as $user) 
+	<ul>
+		@forelse ($users as $user) 
 			<li>{{ $user }}</li>
-		@endforeach
+		@empty
+			<li>No hay Usuarios Registrados.</li>
+		@endforelse
 		</ul>
 	
-	@endempty
-
-
 </body>
 </html>  
