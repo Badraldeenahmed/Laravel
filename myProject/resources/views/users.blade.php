@@ -8,20 +8,20 @@
 	<h1>{{ $title }}</h1>
 	<hr>
 
-	@unless(empty($users))
+	@empty($users)
 
-	<ul>
-	
-	@foreach ($users as $user) 
-		<li>{{ $user }}</li>
-	@endforeach
-	</ul>
-
-	@else 
 		<p>No hay Usuarios Registrados.</p>
+	@else 
+
+		<ul>
+		
+		@foreach ($users as $user) 
+			<li>{{ $user }}</li>
+		@endforeach
+		</ul>
 	
 	@endif
 
 
 </body>
-</html>
+</html>  
