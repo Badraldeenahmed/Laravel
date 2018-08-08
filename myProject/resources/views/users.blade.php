@@ -8,7 +8,7 @@
 	<h1>{{ $title }}</h1>
 	<hr>
 
-	@if (! empty($users))
+	@unless(empty($users))
 
 	<ul>
 	
