@@ -14,6 +14,8 @@
 			<li>No hay Usuarios Registrados.</li>
 		@endforelse
 		</ul>
+
+		{{ time() }}
 	
 </body>
 </html>  

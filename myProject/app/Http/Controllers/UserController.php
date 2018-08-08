@@ -10,13 +10,16 @@ class UserController extends Controller
 
         //Preguntamos si la peticion tiene el campo empty
         
+        //request('data');
+
+
         if(request()->has('empty')){
             //si es asi, el listado estara vacio
             $users = [];
         } else {
             //se tiene el mismo listado de antes
             $users = [
-            'Klvst3r', 'Joel', 'Ellie', 'Tess', 'Tommy', 'Bill', 
+            'Klvst3r', 'Joel', 'Ellie', 'Tess', 'Tommy', 'Bill',  
         ];
 
         }
