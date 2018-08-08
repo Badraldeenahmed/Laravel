@@ -1,1 +1,168 @@
 Blade, el Sistema de plantillas de Laravel
+
+La documentación oficial la podemos localizar en:
+https://laravel.com/docs/5.5/blade
+
+Blade es el sistema de plantilas de Laravel, php como tal se creo como un lenguaje de plantillas, a medida que paso el tiempo despues de la version 5 php se convirtio en un robusto lenguaje orientado a objetos.
+
+Por ende ya no es un lenguaje optimo para usar plantillas, es decir no es tan agradable de caracteristicas que deberiamos tener en un lenguaje de plantillas como la capacidad de escapar de los datos dinamicos de forma automatica que en php debemos hacerlo manualmente y por supuesto, no se nos puede olvidar hacerlo.
+
+Los diversos desarrolladores han creado diversos motores de plantillas para php, por ejemplo existe Smarty, Symfony trabaja con Tweak, Laravel utiliza el motor llamado Blade.
+
+Si queremos imprimir una variable algo como
+
+<?php foraech ($users as $user); ?>
+	<li><?= e($user) ?></li>
+<?php endforeach; ?>
+
+Pdemos usar la sintaxis de dobles llaves
+	<li>{{ $user }}</li>
+
+Podemos utilizar llamados a funcitones. De igual forma para la impresion del titulo
+
+Ej en PHP
+
+	<h1><?= e($title) ?></h1>	
+
+Blade
+	<h1>{{ $title }}</h1>		
+
+Por otro lado en los ciclos se utilizan directivas
+
+Quedando la vista
+
+users.php 
+
+de la siguiente manera:
+
+<h1>{{ $title) }}</h1>
+
+	<ul>
+	
+	@foreach ($users as $user) 
+		<li>{{ $user }}</li>
+	@endforeach
+	</ul>
+
+Al utilizar {{ }}	la sintaxis de doble llave
+
+Protege de ataques XSS y viene con escape de codigo Js. Asi el codigo no solo es mas expresivo y elegante sino que es mas seguro.
+
+Hay quienes no les gusta utilizar el sistema de plantillas por que el framework tendria que interpretar todo este codigo y entonces seria mas lento.
+
+Con blade compila y mantiene en cache la vista por lo que no aecta el rendimiento de la aplicación.
+
+En 
+
+storage / framework / views
+
+y ahi estara estan compiladas en php plano.
+
+al solicitar y no hacer cambios en la vista Laravel la cargara utilizando la vista que esta en cache.
+
+Se pueden eliminar el cache de las vistas con
+
+-----------------<$>----------------------
+php artisan view:clear
+-----------------<$>----------------------
+
+Asi utilizar Blade es tan rapido como utilizar php plano.
+
+Con Blade tendremos acceso a un conjunto de directivas y controles de acceso que no existen en php.
+
+Por ejemplo queremos mostrar el listado de usuarios solamente si existen usuarios.
+
+Para este truco en UserController.php
+
+-----------------<php>----------------------
+//Preguntamos si la peticion tiene el campo empty
+        
+        if( request()->has('empty') ){
+            //si es asi, el listado estara vacio
+            $users = [];
+        }else{
+            //se tiene el mismo listado de antes
+            $users = [
+            'Klvst3r',
+            'Joel',
+            'Ellie',
+            'Tess',
+            'Tommy',
+            'Bill'
+        ];
+
+        }
+-----------------</php>----------------------
+
+En el navegador ponemos pasamos en empty
+
+http://127.0.0.1:8000/usuarios?empty
+
+La lista de usuarios desaparece, este truco es por que no hay una bd
+
+
+Ahora utilizamos la directiva if en la vista
+
+
+-----------------<php>----------------------
+	@if (! empty($users))
+
+	<ul>
+	
+	@foreach ($users as $user) 
+		<li>{{ $user }}</li>
+	@endforeach
+	</ul>
+
+	@else 
+		<p>No hay Usuarios Registrados.</p>
+	
+	@endif
+-----------------</php>----------------------
+
+
+Quitando ?empty
+
+Podemos dentro de una prueba automatiza en 
+
+UserModuleTest.php
+
+en tests/Feature/
+
+
+
+Se prueban las directivas 
+
+
+La directiva @if puede ser utilizada junto con un bloque else (utilizando @else).
+	
+
+Podemos utilizar la directiva @elseif, que como su nombre sugiere nos permite utilizar un bloque else if:
+	
+
+Blade también tiene la directiva @unless, que funciona como un condicional inverso:
+	
+
+En el ejemplo anterior queremos mostrar el listado de usuarios a no ser que la lista esté vacia. De lo contrario queremos mostrar el mensaje del bloque else.
+
+También podemos utilizar la directiva @empty que es una forma más corta de escribir @if (empty (...))
+
+
+En este caso por supuesto invertimos los bloques dentro del condicional.
+
+Además de @foreach, también podemos utilizar @for:
+
+Con la directiva @forelse podemos asignar una opción por defecto a un ciclo foreach sin utilizar bloques anidados:
+
+Con las llaves dobles podremos imprimir tambien las funciones de PHP
+
+Ej.
+{{ time() }}
+
+
+Si es necesario introducir datos dinamicos se puede hacer uso de la fncion request()->has
+
+o bien obtener los datos de la siguiente manera:
+
+request('dato');
+
