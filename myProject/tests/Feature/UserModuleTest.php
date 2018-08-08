@@ -14,9 +14,15 @@ class UserModuleTest extends TestCase
     function it_loads_the_user_list_page()
     {
         //$this->assertTrue(true);
-        $this->get('/usuarios')
+       /* $this->get('/usuarios')
         ->assertStatus(200)
         ->assertSee('Usuarios');
+    }*/
+         $this->get('/usuarios')
+        ->assertStatus(200)
+        ->assertSee('Listado de usuarios')
+        ->assertSee('Joel')
+        ->assertSee('Ellie');
     }
 
     /**

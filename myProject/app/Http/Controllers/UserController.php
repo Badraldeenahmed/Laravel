@@ -8,16 +8,25 @@ class UserController extends Controller
 {
     public function index(){
 
+        //Preguntamos si la peticion tiene el campo empty
+        
+        if( request()->has('empty') ){
+            //si es asi, el listado estara vacio
+            $users = [];
+        }else{
+            //se tiene el mismo listado de antes
+            $users = [
+            'Klvst3r',
+            'Joel',
+            'Ellie',
+            'Tess',
+            'Tommy',
+            'Bill'
+        ];
+
+        }
     	
-    	$users = [
-    		'Klvst3r',
-		    'Joel',
-		    'Ellie',
-		    'Tess',
-    		'Tommy',
-    		'Bill',
-    		'<script>alert("Clicker")</script>'
-    	];
+    	
 
     	$title = 'Listado de usuarios';
 
