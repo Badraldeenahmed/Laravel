@@ -16,7 +16,7 @@ class UserController extends Controller
         } else {
             //se tiene el mismo listado de antes
             $users = [
-            'Klvst3r', 'Joel', 'Ellie', 'Tess', 'Tommy', 'Bill',
+            'Klvst3r', 'Joel', 'Ellie', 'Tess', 'Tommy', 'Bill', 
         ];
 
         }
