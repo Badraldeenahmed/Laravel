@@ -20,7 +20,7 @@
 		@endforeach
 		</ul>
 	
-	@endif
+	@endempty
 
 
 </body>
