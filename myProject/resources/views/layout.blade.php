@@ -48,8 +48,9 @@
 
     <!-- Begin page content -->
     <main role="main" class="container">
-
-
+		
+		@yield('content')
+	
     </main>
 
     <footer class="footer">
