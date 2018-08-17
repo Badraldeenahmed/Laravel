@@ -1,5 +1,7 @@
 @extends('layout')
 
+@section('title', "Usuarios")
+
 @section('content')
 	<h1>{{ $title }}</h1>
 
@@ -19,7 +21,7 @@
 @section('sidebar')
 
 	@parent
-	
+
 
 	<h2>Barra lateral personalizada!</h2>
 
