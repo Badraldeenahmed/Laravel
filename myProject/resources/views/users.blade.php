@@ -7,7 +7,17 @@
 		@forelse ($users as $user)
 			<li>{{ $user }}</li>
 		@empty
-			<li>No hay Usuarios registrados.</li>
+
+			<li>No hay usuarios registrados.</li>
+		
 		@endforelse
+
 	</ul>
+
 @endsection
+
+@section('sidebar')
+
+	<h2>Barra lateral personalizada!</h2>
+
+@endsection	

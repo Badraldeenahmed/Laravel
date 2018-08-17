@@ -56,8 +56,10 @@
 
 		</div>
 		<div class="col-4">
-			<h2>
-				@include('sidebar')
+
+				@section('sidebar')
+					<h2>Barra lateral </h2>
+				@show
 		</div>
 	</div>
 	
