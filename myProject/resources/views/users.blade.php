@@ -8,7 +8,7 @@
 			<li>{{ $user }}</li>
 		@empty
 
-			<li>No hay usuarios registrados.</li>
+			<li>No hay Usuarios Registrados</li>
 		
 		@endforelse
 
@@ -19,6 +19,7 @@
 @section('sidebar')
 
 	@parent
+	
 
 	<h2>Barra lateral personalizada!</h2>
 
