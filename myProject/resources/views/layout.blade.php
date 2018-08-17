@@ -49,7 +49,17 @@
     <!-- Begin page content -->
     <main role="main" class="container">
 		
-		@yield('content')
+		<div class="row mt-3">
+		<div class="col-8">
+			
+			@yield('content')
+
+		</div>
+		<div class="col-4">
+			<h2>
+				@include('sidebar')
+		</div>
+	</div>
 	
     </main>
 
