@@ -44,7 +44,7 @@ class UserController extends Controller
 		//dd(compact('title', 'users'));
 
 		//convert in asociative array
-		return view('users', compact('users', 'title'));
+		return view('users.index', compact('users', 'title'));
 
     }
 
@@ -54,7 +54,7 @@ class UserController extends Controller
         return view('users-show', compact('id','title'));*/
 
 
-        return view('users-show', compact('id'));
+        return view('users.show', compact('id'));
 
     	
     }
