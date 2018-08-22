@@ -1,0 +1,217 @@
+Modificar tablas ya existentes con las migraciones de Laravel
+
+https://styde.net/modificar-tablas-ya-existentes-con-las-migraciones-de-laravel/
+
+
+En la parte anterior aprendimos a configurar nustros credenciales en el archivo de entorno .env.
+
+Se puede cambiar el hosto, el puerto y el tipo de conexion que vamos a utilizar en este acaso mysql.
+
+Para crear las tablas se ejecuto el comando
+
+$ php artisan migrate 
+
+en la consola y se utilizo phpmyadmin para comprobar que las tablas fueron creadas correctamente.
+
+Pero para crear nuevas migraciones o modificarlas las ya existentes.
+
+Para este poryecto queremos crear perfiles diferentes de usuarios y para lleo se quiere que cada usuario pueda agregar una profesion. De momento al registrarse o cuando este actualizando su perfilde usuario, s utilzara.
+
+Se requiere hacerlo desde el sistema de migraciones e ir modificando o creeando una nueva migración. or ejemplo podemos hacerlo modificando la migración ya existente para crear l tabla de usuarios.
+
+Entonces quiere crear una nueva columna llamada profesion y esta columna va a ser una cadena de texto, de hecho como segundo argumento se quire que esta cadena de texto tenga un maximo de 100 cracteres y se puede encadenar un metodo despues de otro, en este caso puede o no tener una profesion.
+
+quedando 
+
+    Schema::create('users', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('profession', 100)->nullable();
+
+
+Si reejecutamos el comando 
+
+# php artisan migrate
+
+Nada pasara en la bd y verificando la estructura de la base de datos, nada ha pasado.
+
+Esto es por que la migración create_sers_table, ya ha sido ejecutada previemante y Laravel no la va a ejecutar nuevamente.
+
+Pero podemos solucionar esto de varias formas:
+
+1. Una seria eliminando toda la estructura de la base de datos que se puede pero no es lo que queremos.
+
+Para ello regresamos a la consola y ejecutamos el comando 
+
+# php artisan migrate:reset
+
+Este comando va a devolver todas las migraciones que han sido ejecutadas en orden inverso, es decir la ultima migración que fue ejecutada se va a devolver primero luego la anterior y asi sucesivamente y asi hasta la primera migración que ejecutamos, Laravel or supusto, va a obtener la nforación de la tabla migrations.
+
+Esta es la responsabilidad de esta tabla.
+
+Ahora si yo recargo la estructura de la base de datos, todas las tablas a excepción de migration fueron eliminadas y explorando la tabla migrations yo ahora no tengo registro ni fila en la tabla ahora puedo entonces ejecutar el comando:
+
+# php artisan migrate
+
+
+Puedo ver que nuevamente ya tengo nuevamente la estructura con el campo agregado profession
+
+Queremos por ejemplo cambiar el tamaño al campo profesions o de 050 caracteres, modificaremos la migracion nuevamente en su campo:
+
+En la consola en lugar de ejecuatar 
+
+php artisan migrate:reset
+php artisan migrate
+
+Puedo ejecutar solamente el comando 
+
+php artisan migrate:refresh
+
+Este comando primero va a ejecutar un reset de todas las migraciones es decir se ejecutan el metodo down() de las migraciones que se ejecutarions hasta ahora en orden inverso y de esta manera se eliminara la tabla 'password_resets' luego se eliminara la tabla 'users' todo en orden ascendente.
+
+Luego Laravel va a recrear la tabla de usuarios y luego creara la tabla password_resets, todo con un solo comando.
+
+Al hacer esto en la estructura de la BD se ha cambiado el tamaño de la profesión.
+
+Los comandos migrate:refresh o migrate:reset suelen ser destructuvos por que pueden eliminar incluso toda la estructura de nuestra base de datos en decir toda la estructura de la base de datos, logicamente si agregamos un nuevo usuario.
+
+ insertamos usuario en la tabal Usuarios 
+
+ Despues ejecutamos el comnado
+
+ php artisan migrate:refresh
+
+ Podemos ver que la información de la tabla de usuarios ha desaparecido ya que volvemos a desarollar la estructura.
+
+ Al inicio de un proyecto esto no sule tener ninguna o,portancia pero su ta tenemos timpo o con información ne la tabla de la base de datos a una tabla existente entonces tenemos que sin necesidad de borrar datos. Se puede lograr 
+
+Para este ejemplo cargamos datos 
+
+y borramos el campo 'professions'.
+
+y en la consola ejecutamos:
+
+php artisan migrate:refresh
+
+Y los datos de la bd de la tabla users han desaparecido.
+
+Asi pues podremos agregar un campo por ejemplo nuevamente agregar el campo 'profession'
+
+En la consola ejecutamos:
+
+# php artisan make:migration 
+
+Con este comando como su nombre lo indica vamos a hacer o generar una nueva migración y debo darle un nuevo nombre, agregando la columna profecion a la tabla users:
+
+# php artisan make:migration add_proffesion_to_users
+
+El nombre es bien descriptivo para lo que se hace  
+
+Ahora de regreso en el editor vamos a modificar el nuevo archivo que ha sido generado puede verse que se tiene el nombre de la migracion con la marca de tiempo con fecha y hora actual.
+
+Tenemos los metodos up y down y con ello podemos con el facade Schema y con ello utilizaremos el metodo table y no el metodo create, puesto que no queremos crear la tabla sino queremos modificarla y la tabla que queremos modificar es la tabla 'users' en la que tendremos un asgundo argumento que es una funcion anonima que recibira un objeto de la tabla que permitira agregar una columna de tipo cadena de texto que se llaara profesion con un maximo de 50 caracteres y sera null quedando:
+
+public function up()
+    {
+         Schema::table('users', function (Blueprint $table) {
+            $table->string('profession', 50)->nullable();
+        });
+    }
+
+Este archivo sera generado y contendra las sentencias use que importan las clases que estamos utilizando, por otro lado el metodo down     
+
+ public function down()
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('profession');
+        });                   
+    }
+
+Pasamos con el metodo dropColumn y especificamos la columna que queremos eliminar.
+
+Quedando finalmente la migración:
+
+class AddProfessionToUsers extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+         Schema::table('users', function (Blueprint $table) {
+            $table->string('profession', 50)->nullable();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('profession');
+        });                   
+    }
+}
+
+
+Ahra ejecutamos en la consola:
+
+# php atisan migrate
+
+Esto ejecutara las migraciones y ejecutara la migración que no se habia ejecutado hasta ahora, es decir ejecuta la migracion que no se habia realizado.
+
+Sin embargo al revisar en la base de datos y la tabla usuarios podremos obersver que se ha agregado en la tabla users el campo profession, solo que se ha colocado en la ultima posicion de las columnas.
+
+Mas sin embargo a queremos despues de la columna password
+
+Podresmo entonces regresar al archivos de migracipin 'add_profession_to_user' y encadenamos el metodo after()}
+
+E indicamos que sera despues del campo password de la siguiente manera: 
+
+
+$table->string('profession', 50)->nullable()->after('password');
+
+hecho esto regresamos a la tarminal y ejecutamos el comando:
+
+Si ejecuta el comando
+
+# php artisan migrate no va a pasar nada
+
+Si ejecuto el comnado:
+
+# php artisan migrate:refresh Se van a eliminar todas las tavblas y con ello todos los datos.
+
+Afortunadamente Laravel nos tiene un comando para estos casos.
+
+# php artisan migrate:rollback
+
+Si revisamos el contenido de la tabla migrations podemos ver que Laravel ha ejecutado esta migración en lotes.
+
+en la tabla migrations observa que en el segundo lote se ejecuto un cambio en la migración para agregar la columna profesion a la tabla users, esto esta definido en lotes diferentes por que fuimos ejecutanto las migraciones poco a poco.
+
+Ejecutamos primeros dos migraciones y luego ejecutamos una tercera migración y la ejecutamos Laravel las regstra en lotes o grupos diferentes 
+
+Ahora si ejecutamos:
+
+php artisan migrate:rollback 
+
+Laravel ejecutara el ultimo lote de migraciones que fueron ejecutas donde se agrego profesion a la tabla users, por supuesto se ejecuta el metodo down
+
+Ahora con ello eliminamos el campo profesion al final de la tabla
+
+Por lo revisando la estructura de la tabla usuario.
+
+Podremos ver que ya no tenemos la tabla profesion.
+
+En migration ya no existe el lote dos, por ello ya modificando el metodo up() de la migracion add_profession_to_users 
+
+# php artisan migrate
+
+Con ello logramos cambiar de posición el campo 'profession' sin destruir la tabla de usuarios y la crease nuevamente.
+
