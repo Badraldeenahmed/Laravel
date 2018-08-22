@@ -1,0 +1,182 @@
+Introducción a las bases de datos y migraciones con Laravel
+
+Comenzando a hablar sobre el tema de las migraciones, las migraciones so un mecanismo que provee el framewok con el cual tendremos una especie de control de versiones con los cambios es la estructura de nuestra base de datos a lo largo del desarrollo del proyecto.
+
+Con las migraciones ademas podremos diseñar dicha estructura utilizando PHP y POO de una forma sencilla y desligada del motor de bade de datos que nuestro proyecto vaya a utilizar por ejemplo, podemos diseñar el esquema de la base de datos tal como:
+
+ Schema::create('users', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
+        });
+
+y luego ejecutar un comando y dicho comando va a crear dichas tablas para el motor que hayamos configurado, MySQL, PostgreSQL, etc.
+
+Siempre que dicho motor sea soportado por Laravel.
+
+Las migraciones son agnosticas del motor de la BD que tu proyecto vaya a utilizar.
+
+Ej. El proyecto actual tiene dos migraciones y estas fueron incluidas al instalar el proyecto, no se crean manualmente.
+
+Cada migracion es un archivo en:
+
+/database/migrations/
+
+Cada archivo tiene en el nombre una marca de tiempo, timestamp con la fecha y la hora en la que fueron creada esta migracion, seguido del nombre de la migración.
+
+2014_10_12_000000_create_users_table.php
+2014_10_12_100000_create_password_resets_table.php
+
+Todas las clases del Framework Laravel tienen, el nombre de espacio siguiente:
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+Esto es indicativo que el Framework Laravel y luego la declaracion de la clase:
+
+class CreateUsersTable extends Migration
+{
+...
+}
+
+y el nombre de la clase corresponde al archivo con un formato donde la primera letra de cada palabra es una mayuscula en lugar de _, luego la clase extiende de la clase Migration.
+
+Tiene dos metodos
+
+ public function up()
+    {
+    }
+
+public function down()
+    {
+        
+    }    
+
+En el primero metodo vamos a especificar lo que queremos que haga esta migracion, por ejemplo: Crerar tabla de usuarios.
+
+Para ella se utiliza el Phasa Schema y llamando al metodo create este metodo recibe como primer argumento el nombre de la tabla que queremos crear en este caso "users". Algo importante es que el nombre de la migracion concide con el nombre de la clase.
+
+Como segundo argumento es la funcion anonima que recibira un argumento que pasara Laravel automaticamente, este va a ser un objeto de cla clase Blueprint y con este objeto vamos a diseñar la tabla de usuarios, con los metodos vamos a recibir las columnas de nuestra tabla, con los metodos increments, con un argumento que sera el nombre de la columna, con un entero sin signo pero tambien sera autoincrement, el metodo string y como parametro pasamos el nombre de la columna de tipo varchar, string para el email encadenado a un metodo inique() que con el tipo varchar que sera unica es decir dos usuarios no pueden tener el mismo email en la bd, para la contraseña otro varchar, para remember se usa un token, no representa un tipo de la base de datos, sino que Laravel incluye unos metodos helpers que nos permitiran.
+
+Como las usuarios van a utilizar autenticacion, Laravel utilizara esta columna como un amanera de almacenar un token, con lo cual puede recordar a los usuarios en visitas susuguientes a la pagina o a la aplicación.
+
+    public function up()
+    {
+        Schema::create('users', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
+        });
+    }
+
+El metodo timestamp o marcas de tiempo y en el metodo helpers se declaran dos columnas 'created_at' y 'updated_at' estas columnas pueden tener un valor nulos.
+
+El Pasasa Shema con schema Create
+
+public function up()
+    {
+        Schema::create('users', function (Blueprint $table) {
+    
+En este caso el formato es similar como en las utas que utilizamos para declarar nuestras rutas y es es la forma con la que podremos 
+
+EJ.
+/routes/web.php
+
+Route::get('/usuarios', 'UserController@index');    
+
+Donde llamamo a metodos estaticos con programación en PHP con POO y Laravel utiliza un mecanismo mas complejo.
+
+El metodo down nos permitira revertir el metodo up, que permite crear nuestra tabla de usuarios y  en el metodo down eliminara exactamente y para ello Laravel utiliza los methodos
+
+ public function down()
+    {
+        Schema::dropIfExists('users');
+    }
+
+Si desde la conola hago:
+
+php artisan migrate, edt       
+
+Recibiremos un eror del cual no debemo preocupanos, ya que nos permitira el acceso a la BD.
+
+Crearemos un.
+
+En MySQL crearemos una de ejemplo
+
+
+# mysql -u root -p 
+
+# CREATE DATABASE proyecto_klvt3r																									
+
+Teniendo esto revertir
+
+Otra vez en terminal en la carpeta del projecto ejecutamos:
+
+# php artisan migrate
+
+Pudiendose crear con otras herramientas.
+
+se generara un error 
+
+klvst3r@klvst3r:Laravel/myProject ‹master*›$ php artisan migrate
+
+In Connection.php line 664:
+                                                                                                   
+  SQLSTATE[HY000] [1045] Access denied for user 'homestead'@'localhost' (using password: YES) (SQ  
+  L: select * from information_schema.tables where table_schema = homestead and table_name = migr  
+  ations)                                                                                          
+                                                                                                   
+
+In Connector.php line 67:
+                                                                                               
+  SQLSTATE[HY000] [1045] Access denied for user 'homestead'@'localhost' (using password: YES)  
+                                                                                              
+
+Esto es por que se ha creado la Bd pero no se ha configurado en el proyecto:
+
+para ello tendremos que ir al archivo
+
+
+.env
+
+que es el archivo de entorno y cambiar los parametros de la base de datos.
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=proy_klvst3r
+DB_USERNAME=dev
+DB_PASSWORD=desarrollo
+
+
+klvst3r@klvst3r:Laravel/myProject ‹master*›$ php artisan migrate
+Migration table created successfully.
+Migrating: 2014_10_12_000000_create_users_table
+Migrated:  2014_10_12_000000_create_users_table
+Migrating: 2014_10_12_100000_create_password_resets_table
+Migrated:  2014_10_12_100000_create_password_resets_table
+
+
+Si obtenemos los mensajes de confirmación sabremos que la conexion fue correcta y se han ejecutado los archivos de migración.
+
+En un editor de BD vemos la migración realizada
+
+teniendo 3 tblas
+
+migrations	  	 
+password_resets	 
+users
+
+Se ejecutan las migraciones y se crean las tablas y en las migraciones estaran os identificadores de cada migración realizada.
+
+Y en las otras tablas estan las columnas indicadas agregando los timestamp.
+
+https://styde.net/introduccion-a-las-bases-de-datos-y-migraciones-con-laravel/
+https://styde.net/laravel-5/
