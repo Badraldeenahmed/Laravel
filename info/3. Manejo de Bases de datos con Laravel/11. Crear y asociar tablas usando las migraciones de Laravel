@@ -1,0 +1,385 @@
+Al comenzar un desarrollo en algunas ocaciones no se comienza creando todas las tablas es decir no estan todas las migraciones, puede iniciarse utilizando las pruebas automatizadas que se vieron lecciones atras y mediantes estas pruebas se suele ver que tablas y que columnas sd deban crear y asi poco a poco se van estructurando las bases de datos. 
+
+Para entendar mas el esquema de migraciones de Laravel. 
+
+Teniendo como ejemplo que ya se tiene nustro formulario login de acceso y ya se tiene regtrso de usuarios regisrados, pero nos damos cuanta que varios usuarios se han registrado tienen la mism profesion sin embargo la han escrito de forma diferente.
+
+Ej.
+Backend developer
+Back-End developer
+Back-End programmer
+
+Entonces tenemos tres usuarios que tienen la misma profesion pero que estan escritas de forma diferente y eso difiutara hacer busquedas o mostrar datos dependiendo la prefesion que tengan si esto es algo que nos preocupa deberiamos solucionarlo de una mejor manera.
+
+En varios sitios Para colocar la profesion sera seleccionada en lugarde escribirla en un campo de texto.Esto es lo que se hara a nive de base de datos inicialmente y posteriormente a nivel de un formulario.
+
+Para ello en la consola creamos una nueva migración:
+
+# php artisan make:migration create_professions_table
+
+Puesto que voy a crear una tabla de professiones y es ahi donde yo voy a colocar las profesiones que yo considero validas para que el usuario seleccione una al momento de momento de registrarse o modificar su perfil.
+
+Con la convencion Laravel dara el codigo boilerplate para crear la tabla de profesiones 
+
+public function up()
+    {
+        Schema::create('profession', function (Blueprint $table) {
+            $table->increments('id');
+            $table->timestamps();
+        });
+    }
+
+y de hecho se puede demostrar si inspecciono una de las clases del proyecto que se llama migrate   
+
+MigrateMakeCommand  
+
+Desde:
+
+/vendor/laravel/framework/src/illuminate/Database/Console/Migrations
+
+En este archivo se tiene el codigo para ejecutar una nueva migración.
+
+En el metodo handle()
+
+Revisara si el patron que se esta utilizando para el nombre de la migración incluye el prefijo 'create'
+
+if (! $table) {
+            if (preg_match('/^create_(\w+)_table$/', $name, $matches)) {
+                $table = $matches[1];
+
+                $create = true;
+            }
+
+Y el subfijo '_table'. De ser asi Laravel va a generar el codigo Boilerplate para que se pueda comenzar a crear una nueva tabla esno no sucede si por ejemplo ejecuto:
+
+# php artisan make:migration new_professions_table y nos dara como resultado solo lo siguiente:
+
+public function up()
+    {
+        //
+    }
+
+En los metodos de la migración. Se puede escribir aun asi es no es problema pero utilizando la convención ahorraremos algo de timepo.
+
+Podremos especificar esto manualmente.
+
+Si no queremos utilizar la convensión con un parametro --create= y luego el nombre de la tabla
+
+# php artisan make:migration new_professions_ table --create=professions
+
+Con ello tendremos nuevamente el codigo Boilerplate para comenzar a crear nuestra tabla en el metodo Up() y en el metodo down() tenemos el metodo para eliminar la tabla,
+
+Esto fue agregado por Laravel Automaticamente al moimento de crear la migración
+
+ public function up()
+    {
+        Schema::create('professions', function (Blueprint $table) {
+            $table->increments('id');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('professions');
+    }
+
+
+Vamos atrabajar con la primera migración creada inicialmente
+
+    public function up()
+    {
+        Schema::create('professions', function (Blueprint $table) {
+            $table->increments('id');
+
+            $table->string('title', 100);
+
+            $table->timestamps();
+        });
+    }
+
+Hecho esto y regresamos a la consola nuevamente ejecutamos:
+
+# php artisan migrate
+
+
+Si verificamos la estructura de las tablas existen 4 tablas:
+migrations 
+password_resets
+professions
+users
+
+Mas sin embargo al revisar la estructura de la tabla usuarios observamos que existe un campo llamado professions de tipo varchar con longitud 50.
+
+La idea es que exista cada profesion en la tabla professions y cada profesion tendra un id.
+
+Agregamos dos profesiones en la tabla professions
+
+Back-end Developer
+Front-End Developer
+
+La intencións es asociar a cada uno de los usuarios del sistema con una de las profesiones ya existentes en la tabla professions.
+
+Entonces ya no utilizaremos una cadena de texto, sino un entero sin signo y poder tener una relación con el identificador de la tabla professions.
+
+SI por ejemplo la tabla professions tiene un id 1, entonces en la tabla users, en lugar de almacenar la cadena de texto correspondiente, se va a almacenar el valor 1 o 2 y cuando en Bd se utiliza una columna para hacer referencia con otra tabla se le da el nombre de clave foranea o llave foranea, puesto que es la columna o identificador para cada registro relacionado con la tabla y como es de otra tabla se le da el nombre de clave o llave foranea.
+
+Para identificar que una columna sera una llave foranea, podemos darle el subfijo '_id'
+
+Asi que creamos una nueva migración:
+
+# php artisan make:migration add_profession_id_to_users
+
+Abrimos la migracion 
+
+Quedando el metodo up() de la siguiente manera:
+
+public function up()
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('profession');
+             //$table->unsignedInteger('profession_id');
+            $table->integer('profession_id')->unsigned();
+            
+        });
+    }
+
+Pudiendo quedar con la siguiente notacion
+
+$table->unsignedInteger('profession_id');
+
+o bien 
+
+$table->integer('profession')->unsigned();
+
+
+
+Para el caso del metodo down() Hacemos la operación contraria:
+
+ public function down()
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('profession_id');
+            $table->string('profession', 50)->nullable()->after('password');
+          
+        });   
+    }
+
+En la consola reejecutamos el comando:
+
+# php artisan migrate
+
+
+Podemos ver nuevamente la estructura de la tabla users, aun asi las migraciones estan un poco desordenadas,tenemos los metodos para agregar una columna pero luego hay otra migración para eliminarla la misma columna, y esto puede ser ya un poco dificil de leer.
+
+En casos como este donde apenas estaos comenzando el desarrolo de nuestro proyecto, donde no tenemos una bd real en producción, en lugar, nosotros solamete podemos ejecutar migraciones existentes y recrear la base de datos.
+
+Por ejemplo puedo agregar directamente la columna profession_id que sera una columna que sera un entero sin signo, un entero que sea positivo, yo puedo agegar esta columna a la tabla de usuarios directamente al archivo de migracion 'create_users_table'
+
+
+public function up()
+    {
+        Schema::create('users', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->string('profession_id');
+            $table->rememberToken();
+            $table->timestamps();
+        });
+    }
+
+pudiendo quitar las siguientes dos migraciones:
+
+add_profession_to users
+add_profession_id_to_users
+
+y regresar a la consola
+
+# php artisan migrate:refresh
+
+
+
+ahora todo va bien, si tenemos algun problema y como estamos en el proceso de creación de la bd, podemos eliminar las tablas y ejecuar nuevamente ñlas migraciones:
+
+# php artisan migrate
+
+y en la tabla profession nuevamente creamos los dos registros 
+
+Back-end Developer
+Front-End Developer
+
+Y en la tabla de users agregamos un nuevo usuario
+
+puedo escribir en el campo profession_id (1 o 2) para hacer referencia a las profesiones de la tabla professions, no tengo nada que impode y edite un usuario con la profesion 50 a pesar de que no existe ese valor en la bd, podemos evitar esto y mantener la integridad de la bd, si agrego una restriccion de llave o clave foranea, esto puedo hacerlo  con Laravel modificando la migracion 'create_user_table'
+
+Y definimos la columna como antes pero llamaremos al metodo foreing() donde el campo profession_id va a hacer referencia al campo id de la tabla professions
+
+ public function up()
+    {
+        Schema::create('users', function (Blueprint $table) {
+            $table->increments('id');
+
+            $table->unsignedInteger('profession_id');
+            $table->foreing('profession_id')->references('id')->on('professions');
+
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
+        });
+    }
+
+Regresamos a la consola y 
+
+# php artisan migrate:refresh
+
+teniendo un error y esto ocurre por que la tabla profession no existe, no ha sido creada pueto que primero laravel crea primero la tabla users y luego ejecutara la tabla de professiones, para evitar este error tengo dos alternativas:
+
+1. Modificar la marca de tiempo de create_users_table para que quede despues de a tabla de profesiones
+
+2014_10_12_000000_create_users_table.php
+
+2018_08_22_200000_create_users_table.php
+
+Si hacemos esto y regresamos a la consola 
+
+Ahora ejecutamos
+
+# php artisan migrate:refresh
+
+tenemos un error, y las migraciones quedan en un estado inconsistente, como recuperarse.
+
+Si sucede esto hay dos formas de solucionar el problema:
+
+a) la primera es regresar a la Bd y seleccionar todas las tablas y eliminar todas las tablas por completo y eliminarlas
+
+podemos entonces:
+
+# php artisan migrate
+
+Creandose nuevamente las migraciones.
+
+b) Es uilizar es comando 
+
+# php artisan migrate:fresh
+
+Este comando elimina todas las tablas y comenzara desde cero con las migraciones y luego ejecutando cada migracion una por una. Anque es un comando muy util es un comando muy destructuvo, por que eliminara toda la información de las tablas.
+
+Podemos en el archvo de entorno la directiva de producción:
+
+APP_ENV=production
+
+y enonces 
+
+# php artisan migrate:fresh
+
+ Asi Laravel nos protegera si estamos en el entorno de produccion, aun asi es importante generar un respaldo de la bd antes de hacer un cambio en el entorno de producción.
+
+ 2) sino se quiere cambiar la fecha de la migración de la tabla usuarios.
+
+ seria crear la tabla de users sin la llave foranea proffesion id 
+
+  public function up()
+    {
+        Schema::create('users', function (Blueprint $table) {
+            $table->increments('id');
+
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
+        });
+    }
+
+Y luego crear una migracipn extra para entonces agregar con otra migración esta con:
+
+# php artisan make:migration add_profession_id_to_users
+
+ public function up()
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->unsignedInteger('profession_id');
+            $table->foreing('profession_id')->references('id')->on('professions');
+
+        });
+    }    
+
+En este caso sin embargo debemos tener cuidado de agregar en el metodo Down()    
+
+public function down()
+    {
+        
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign(['profession_id']);
+            $table->dropColumn('profession_id');
+
+        });
+    }
+
+
+Y en la consola podemos ejecutar:
+
+# php artisan migrate:fresh
+# php artisan migrate:refresh
+
+Para comprobar que se han creado las migraciones correctamente.
+
+Si no se necesita la funcionalidad de migrate:rollback ni de migrate:refresh 
+
+ Solo se utilizra el metodo 
+
+ php artisan migrate:fresh
+
+ en ese caso no hace falta que se defina el codigo en el metodo down.
+
+ Comandondo el codigo del metodo down()
+
+ regresamos a la consola
+
+ # php artisan migrate:refresh
+
+ Pero si ejecuta
+
+ # php artisan migrate:fresh
+
+ Puesto que Laravel va a eliminar todas las tablas en este caso no importa si yo he definido o no dentro del metodo down(), asi puedo excuir este codigi
+
+ asi si vamos a utilizar fresh no importa el codigio del metodo down sin embargo es obligatorio si vamos a utilizar la funcionalidad de migrate:refresh y de migrate:rollback
+
+ Regresamos a nuestro phpmyadmin
+
+  y para evitar estar escribiendo lso campos de professions cada vez que se generan nuevas migraciones.
+
+Keyname
+PRIMARY
+users_email_unique	
+users_profession_id_foreign	
+
+Esto no solamente indica los indices, y no solo permitira crear una relacion con la tabla professions sino que hara que las busquedas relacionadas a esta columna sean mas rapidas.
+
+Creando un usuario en lugar de poner uina caja de texto en el campo profesiones.
+
+dara la opcion para seleccionar de la tabla professions
+
+y reutilizamos este codigo para insertar otro usuario un email diferente pero con una profesion no valida ej. 20
+
+INSERT INTO `users` (`id`, `profession_id`, `name`, `email`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES (NULL, '20', 'Klvst3r', 'kozlov@gmail.com', '1234', NULL, NULL, NULL);
+
+Notaremos que marca un error 
+
+#1452 - Cannot add or update a child row: a foreign key constraint fails (`proy_klvst3r`.`users`, CONSTRAINT `users_profession_id_foreign` FOREIGN KEY (`profession_id`) REFERENCES `professions` (`id`))
+
+Por restriccion de la llave foranea en la bd, asi que de esta manera se mantiene la integridad de la bd, esto es a nivel de sistema por que mas adelante necesitaremos validaciones cuando trabajemos con el codigo de la aplicacion.
+
+
+
+

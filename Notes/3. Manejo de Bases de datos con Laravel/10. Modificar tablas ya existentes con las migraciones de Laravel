@@ -49,6 +49,9 @@ php artisan migrate:refresh
 
 Modificar migraciones
 
+Regresando a phpmyadmin
+
+
 Al realizar una modificación en la migración original tenemos el problema de que los comandos reset y refresh eliminaran el contenido de las tablas en la base de datos. Para evitar esto podemos (utilizando el comando make:migration) crear una nueva migración y agregar desde ahí las modificaciones que necesitamos:
 php artisan make:migration add_profession_to_users
 
