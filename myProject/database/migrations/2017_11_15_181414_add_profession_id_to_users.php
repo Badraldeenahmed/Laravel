@@ -17,7 +17,7 @@ class AddProfessionIdToUsers extends Migration
             /*$table->unsignedInteger('profession_id')->nullable();
             $table->foreign('profession_id')->references('id')->on('professions');*/
             $table->unsignedInteger('profession_id');
-            //$table->foreign('profession_id')->references('id')->on('professions');
+            $table->foreign('profession_id')->references('id')->on('professions');
         });
     }
 
