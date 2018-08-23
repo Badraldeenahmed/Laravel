@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProfessionTable extends Migration
+class CreateProfessionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class CreateProfessionTable extends Migration
         Schema::create('professions', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('title', 100);
+            $table->string('title', 100)->unique();
 
             $table->timestamps();
         });
@@ -29,6 +29,6 @@ class CreateProfessionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('profession');
+        Schema::dropIfExists('professions');
     }
 }
