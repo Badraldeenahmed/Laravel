@@ -1,0 +1,438 @@
+Inserción de datos con los seeders de Laravel
+Github
+
+https://github.com/StydeNet/curso-de-laravel-desde-cero/tree/lesson12/
+
+
+
+Vamos a agregar los datos mediante el componente seeders, anteriormente para agragar unas profesiones utilizamos phpmyadmin, los agragamos manualmente en el caso de profesion pero al utilizar migrate:fresh o migrate:refresh perdemos estos datos y asi como estamos ejecutado un comando para ejecutar las tablas lo ideal es ejecutar un comando para cargar los datos de prueba y no se pierdan cada vez que necesitamos restaurar la base de datos.
+
+Ademas si estos datos estan en nuestro codigo y otra persona que revise nuestro codigo al clonar el repositorio, va a poder reproducir la bd si no tambien cargar algunos datos de prueba.
+
+Para ello vamos atilizar los seeders de Laravel.
+
+El primero es:
+
+# php artisan make:seeder <nombre_seeder>
+
+#php artisan make:seeder ProfessionSeeder
+
+En el editor tenemos una nueva clase en 
+
+/seeds/ProfessionSedder.php
+
+Y Laravel solo da el caparazon donde yo debo comenzar a escribir el codigo dentro del metodo run() con el Facade DB
+
+Agregando el namespace 
+
+\Illuminate\Support\Facades\DB:: dentro de la clase o puedo importar el namespace al principio del archivo.
+
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
+class ProfessionSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        //
+    }
+}
+
+Dentro del metodo run() insertamos nuestro codigo:
+
+ public function run()
+    {
+        DB::table('professions')->insert([
+        	'name' => 'Desarrollador Back-end',
+        ]);
+    }
+
+Hecho esto necesito registrar este seeder, y para ello vamos a utilizamos la clase DatabaseSeeder que ya viene incluida en la carpeta Seeders 
+
+$this->call(ProfessionSeeder::class);
+
+Esto simplemente me va a dar el nombre de la clase.
+
+Demostrando esto con:
+
+public function run()
+    {
+        dd(ProfessionSeeder::class);
+
+        $this->call(ProfessionSeeder::class);
+    }
+
+Regresando a la consola:
+
+# php artisan db:seed    
+
+Nos dara una salida solo en terminal del nombre del Seeder
+
+Lo que signific que en lugar de utilizar esta sintaxis de class yo simplemente podria pasar el nombre de la clase y eso es equivalente:
+
+
+dd('ProfessionSeeder');
+
+La diferencia de utilizar class es que si yo cometo aca un error la cadena de texto no va a avisar que yo tengo un error, en este caso es posible que yo reciba una advertencia del editor, por ejemplo me indica que la clase no esta definida.
+
+Aclarado esto dejamos la definición con la clase:
+
+# php artisan db:seed
+
+Esto arroja un error la columna nombre no fue encontrada en la tabla, lleva el codigo sql que se intento ejecutar y en este caso fallo por que la columna no existe en su lugar se llama 'title' en lugar de name, debemos modificar el seeder o modificar la estructura de la tabla y correr nuevamente las migraciones respectivas.
+
+DB::table('professions')->insert([
+        	'title' => 'Desarrollador Back-end',
+        ]);
+
+Y de regreso a la consola: 
+
+# php artisan db:seed
+
+De hecho esto lo podemos comprobar el resultado regresando al administrador de BD verificando el registro insertado en la tabla professions con la nueva profession.
+
+Regresamos al editor y queremos agregar otro registro de profession 'Desarrollador Front-end' y otra profession para 'Desarrollador Web'
+
+public function run()
+    {
+        DB::table('professions')->insert([
+        	'title' => 'Desarrollador Back-end',
+        ]);
+
+        DB::table('professions')->insert([
+        	'title' => 'Desarrollador Front-end',
+        ]);
+
+        DB::table('professions')->insert([
+        	'title' => 'Diseñador Web',
+        ]);
+    }
+
+Y as sucesivamente entonces varias profesiones se repetiran de acuerdo a las ejecuciones realizadas, por cierto seria adecuado crear una restricción de base de datos en la tabla de proifesiones para evitar tener dos profesiones con el mismo nombre o el mismo titulo esto lo hacemos desde el archivo de migración
+
+create_professions_table
+
+$table->string('title', 100)->unique();
+
+Ahora en la consola ejecuto:
+
+# php artisan db:seed no se tendra un error por que yo no he reejecutado las migraciones, entonces sera necesario reejecutar las migraciones con el comando:
+
+# php artisan migrate:fresh
+
+Y revisamos la estructura de la BD y verificar que la Tabla Profession esta vacia y podremos ejecutar nuevamente el comando:
+
+# php artisan db:seed
+
+Para reejecutar los seeders y de esta manera crear los primeros registros en la tabla de profesiones de forma muy sencilla y si ejecutamos nuevamente los seeder  
+
+Ahora obtenemos error por enrada duplicada, en este caso en la tabla de profesiones y esto es por que al reejecutar las migraciones entonces se creio la restriccion y no podemos tener dos profesiones con el mismo tipo.
+
+Queremos eliminar todas las profesiones antes de crearlas nuevamente.
+
+Para solucionar esto anteponemos:
+
+DB: table('professions')->truncate();
+
+public function run()
+    {
+
+    	DB::table('professions')->truncate();
+
+        DB::table('professions')->insert([
+        	'title' => 'Desarrollador Back-end',
+        ]);
+
+        DB::table('professions')->insert([
+        	'title' => 'Desarrollador Front-end',
+        ]);
+
+        DB::table('professions')->insert([
+        	'title' => 'Diseñador Web',
+        ]);
+    }
+
+Este metodo me va a permitir vaciar la tabla  
+
+# php artisan db:seed
+
+ Recibiremos un nuevo error por la restriccion de claves foraneas asociada e este caso al campo profession_id en la tabla de usuarios, asi que no podemos vacira esta tabla de buena s aprimeras al menos que desactivemos la revision de llaves foraneas. 
+
+  Abriendo la migracion de :
+
+  2018_08_22_210000__add_profession_id_to_users.php
+
+  public function up()
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->unsignedInteger('profession_id');
+            //$table->unsignedInteger('profession_id')->nullable();
+            //$table->foreign('profession_id')->references('id')->on('professions');
+        });
+    }
+
+Regresamos a la consola y ejecutamos 
+
+# php artisan migrate:fresh
+
+Para eliminar todas las tablas y reejecutar las migraciones      
+
+
+# php artisan db:seed
+
+Exploramos la tabla de proesiones podremos ver que tenemos nuestras tres profesiones y que podemos 
+
+y podremos reejecutar este comando cuantas veces quieramos y siempre vamos a tener las mismas tres profesiones, puesto que estoy vaciando la tabla antes de agregar las profesiones nuevamente.
+
+Regresando a mi migración restauro la linea de validación de clave foranea
+
+$table->foreign('profession_id')->references('id')->on('professions');
+
+Reejecutamos migraciones puesto que modificamos estructura de la tabla profesiones
+
+# php artisan migrate:fresh
+
+Ahora  
+
+# php artisan db:seed
+
+Arrojando error 
+
+------------ error code -----------
+
+SQLSTATE[42000]: Syntax error or access violation: 1701 Cannot truncate a table referenced in a  
+   foreign key constraint (`proy_klvst3r`.`users`, CONSTRAINT `users_profession_id_foreign` FOREI  
+  GN KEY (`profession_id`) REFERENCES `proy_klvst3r`.`professions` (`id`)) (SQL: truncate `profes  
+  sions`)                                                                                          
+                                                                                                   
+
+In Connection.php line 458:
+                                                                                                   
+  SQLSTATE[42000]: Syntax error or access violation: 1701 Cannot truncate a table referenced in a  
+   foreign key constraint (`proy_klvst3r`.`users`, CONSTRAINT `users_profession_id_foreign` FOREI  
+  GN KEY (`profession_id`) REFERENCES `proy_klvst3r`.`professions` (`id`))      
+
+------------ error code -----------
+
+
+En este caso yo puedo evitar este error si ejecuto la siguiente sentencia pero para ello: 
+
+en ProfessionSeeder.php
+
+
+DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
+
+Con lo cual desactivamos la revision de llaves foraneas en laBD, es una sentencia SQL que se va a ejecutar dn la Bd antes de mandar la orden para vaciar la tabla de profesiones.
+
+En consola:
+
+# php artisan db:seed
+
+Sin ningun problema y tantas veces como yo quiera.
+
+Y en la Tabla profesiones siempre tendre tres profesiones, 
+
+		DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
+
+    	DB::table('professions')->truncate();
+
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
+
+
+ahora tal vez nos interese reactivar el proceso de revision de llaves foraneas una vez que haya sido eliminada la tabla, tal ves nos interese eliminar varias tablas en este caso podremos mover el codigio a nuestro seeder general 
+
+DatabaseSeeder.php
+
+
+public function run()
+    {
+
+    	DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
+
+    	DB::table('professions')->truncate();
+
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
+
+		//$this->call(UsersTableSeeder::class);        
+
+        $this->call(ProfessionSeeder::class);
+    }
+
+Con ello podremos ser capaces de ejecutar
+
+# php artisan db:seed
+
+Y para trabajar de forma mas ordenada paaamos el codigo a un metodo diferente llamado truncate tables
+
+protected function truncateTables(array $tables)
+    {
+
+    	DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
+
+    	DB::table('professions')->truncate();
+
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
+
+		
+    }
+
+Y pasamos los parametros de las tablas que se desean truncar
+
+
+public function run()
+    {
+
+    	$this->truncateTables([
+    		'professions'
+    	]);
+
+		//$this->call(UsersTableSeeder::class);        
+
+        $this->call(ProfessionSeeder::class);
+    }
+
+
+
+Sis son varias tablas entonces recorremos las tablas a truncar con un foreach
+
+DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
+
+    	foreach ($tables as $table) {
+    		DB::table($table)->truncate();
+    	}
+
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
+
+Hecho esto podemos regresar a consola y ejecutar:
+
+# php artisan db:seed
+
+Haciendo la refactorización paso a paso.
+
+Hacemos un nuevo seeder para la tabla usuarios 
+
+# php artisan make:seeder UserSeeder
+
+Regresamos al editor y modificamos el nuevo seeder
+
+Y se agraga el Facade
+
+use Illuminate\Support\Facades\DB;
+
+Quedando
+
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
+class UserSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        DB::table('users')->insert([
+        	'name' 	=> 'Klvst3r IO',
+        	'email'	=> 'klvst3r@gmail.com',
+        	'password' => bcrypt('laravel'), 
+        	 
+        ]);
+    }
+}
+
+Aqui se excluye el campo profession_id por que este proviene de otra tabla, en este caso se omite este campo.
+
+En la terminal
+
+# php artisan db:seed
+
+Envia soo un mensaje de confirmación, esto sucede por que debemos registrar el seeder dentro de DatabaseSeeder
+
+Genera un error:
+
+----- code error -----
+Seeding: ProfessionSeeder
+Seeding: UserSeeder
+
+In Connection.php line 664:
+                                                                                                   
+  SQLSTATE[HY000]: General error: 1364 Field 'profession_id' doesn't have a default value (SQL: i  
+  nsert into `users` (`name`, `email`, `password`) values (Klvst3r IO, klvst3r@gmail.com, $2y$10$  
+  jMPjyDxUtjTvZ5MabHNE2.jGA2d1NnZku7NOKUZWdvvGygEzHIBVS))                                          
+                                                                                                   
+
+In Connection.php line 458:
+                                                                                           
+  SQLSTATE[HY000]: General error: 1364 Field 'profession_id' doesn't have a default value  
+----- code error -----              
+
+Esto es por que no tiene un valor por defecto, y no era nullable, corregimso esto en la migración
+
+add_profession_id_to_users.php
+
+
+
+$table->unsignedInteger('profession_id')->nullable();
+
+
+y de esta manera en la consola y reejecutamos las migraciones
+
+# php artisan migrate:fresh
+
+y reejecutamos los seeders
+
+# php artisan db:seed
+
+
+Y exploramos la tabla de usuarios que se creo un usuario exitosamente, ahora regresamos a la consola y volvemos a ejecutar los seeders nuevamente
+
+# php artisan db:seed
+
+----- code error -----
+In Connection.php line 664:
+                                                                                                   
+  SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'klvst3r@gmail.com' for k  
+  ey 'users_email_unique' (SQL: insert into `users` (`name`, `email`, `password`) values (Klvst3r  
+   IO, klvst3r@gmail.com, $2y$10$nY2H22zzDWJdwSJ.ShzfEefahKX2FRbPhJO7oYakj6SFZC2BN5LAy))           
+                                                                                                   
+
+In Connection.php line 458:
+                                                                                                   
+  SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'klvst3r@gmail.com' for k  
+  ey 'users_email_unique'   
+----- code error -----
+
+Esto es por que estamos intentando crear el mismo usuarios dos veces y tenemos una restriuccion en la tabla de usuarios que el campo email debe ser unico no podemos registrar a dos usuarios con la misma dirección de correo.
+
+Todas estas protecciones son a nivel de base de datos.
+
+Para prevenir este error regresamos a 
+
+DatabaseSeeder.php
+
+Indicar tambien que queremos vacial la tabla de usuarios
+
+$this->truncateTables([
+    		'users',
+    		'professions'
+    	]);
+
+Con ello podremos ejecutar los seeder, cuantas veces quiera
+
+# php artisan db:seed
+
+Por cieto si queremos ejecutar  php artisan migrate:fresh, php artisan db:seed  podemos ejecutar ambos si pasamos --seed al comando fresh
+
+# php artisan migrate:fresh --seed
+
+
+Se crean la tablas con el sistema de migraciones y finalmente se ejecutan los seeders. Haciendo esto mas rapido y mas comodo.
+
+
