@@ -1,0 +1,145 @@
+Construcción de Consultas SQL de Laravel
+URL
+https://styde.net/constructor-de-consultas-sql-de-laravel/
+Github:
+https://github.com/StydeNet/curso-de-laravel-desde-cero/tree/lesson13
+
+En esta lección veremos más a detalle cómo funciona el constructor de SQL de Laravel y aprovecharé la ocasión para enseñarte cómo puedes ejecutar consultas SQL de forma manual utilizando el framework y cómo puedes protegerte del ataque de inyección SQL cuando utilizas Laravel.
+
+Notas
+Método insert
+
+Con el método DB::insert podemos escribir consultas SQL de forma manual para insertar contenido dentro de nuestra base de datos. Por ejemplo, el código del seeder ProfessionSeeder.php que utiliza el método DB::table:
+DB::table('professions')->insert([
+ 'title' => 'Desarrollador back-end',
+]);
+1
+2
+3
+	
+DB::table('professions')->insert([
+ 'title' => 'Desarrollador back-end',
+]);
+
+Puede ser re-escrito utilizando el método DB::insert, directamente con código SQL:
+DB::insert('INSERT INTO professions (title) VALUES ("Desarrollador back-end")');
+1
+	
+DB::insert('INSERT INTO professions (title) VALUES ("Desarrollador back-end")');
+
+Aunque DB::insert nos da el mismo resultado que DB::table, cuando realizamos consultas de este tipo y recibimos datos ingresados por un usuario debemos tener mucho cuidado, ya que nos exponemos a ataques de inyección de SQL.
+Inyección de SQL
+
+Nuestro código es vulnerable a inyecciones de SQL cuando insertamos variables dentro de una solicitud de SQL. Por ejemplo, si tuvieras una consulta donde seleccionas una serie de articulos dependiendo de un autor:
+$sql = "SELECT * FROM articles WHERE id_author = $id";
+1
+	
+$sql = "SELECT * FROM articles WHERE id_author = $id";
+
+Esta consulta trae todos los artículos escritos por un determinado autor. Sin embargo, dentro de esta consulta estamos insertando contenido de forma directa al colocar la variable $id.
+
+Supón que ingresamos a los artículos del autor desde una URL, pasando como argumento el id del autor (?id=1 o articulos/{id}), en este caso retornaríamos todos los artículos escritos por el autor cuyo id sea igual a 1. Sin embargo, como nuestro código es vulnerable, un usuario malintencionado podría cambiar la URL por ?id=1 UNION SELECT password FROM users. La consulta realmente se estaría realizando de esta forma:
+SELECT * FROM articles WHERE id_author = 1 UNION SELECT password FROM users;
+1
+	
+SELECT * FROM articles WHERE id_author = 1 UNION SELECT password FROM users;
+
+Esta consulta selecciona todos los artículos y luego selecciona todas las contraseñas almacenadas en la tabla users.
+
+Al almacenar contraseñas en una base de datos asegurate de siempre encriptarlas.
+Parametros dinámicos
+
+Para evitar ataques de inyección de SQL podemos utilizar parámetros dinámicos. Laravel utiliza internamente el componente PDO de PHP y debido a esto podemos colocar marcadores en nuestra consulta. Laravel nos permite pasar sus valores en un array como segundo argumento del método:
+DB::insert('INSERT INTO professions (title) VALUES (?)', ['Desarrollador back-end']);
+1
+	
+DB::insert('INSERT INTO professions (title) VALUES (?)', ['Desarrollador back-end']);
+
+Otra forma de pasar los parametros es usando como marcador un parametro de sustitución con nombre y como segundo argumento pasamos un array asociativo de los respectivos parámetros con sus valores:
+DB::insert('INSERT INTO professions (title) VALUES (:title)', ['title' => 'Desarrollador back-end']);
+1
+	
+DB::insert('INSERT INTO professions (title) VALUES (:title)', ['title' => 'Desarrollador back-end']);
+
+Al hacer esto estaremos protegidos de ataques de inyección de SQL puesto que los parámetros dinámicos serán escapados de forma automática y segura.
+Método select
+
+Utilizando el método DB::select podemos construir una consulta SELECT de SQL de forma manual:
+DB::select('SELECT id FROM professions WHERE title = ?', ['Desarrollador back-end']);
+1
+	
+DB::select('SELECT id FROM professions WHERE title = ?', ['Desarrollador back-end']);
+
+Por otro lado, utilizando el constructor de consultas podemos realizar una consulta SQL de tipo SELECT, de la siguiente forma:
+$professions = DB::table('professions')->select('id')->take(1)->get();
+1
+	
+$professions = DB::table('professions')->select('id')->take(1)->get();
+
+El resultado de esta consulta es un objeto de la clase Illuminate\Support\Collection que encapsula el array de datos y esto nos trae algunas ventajas extras: una interfaz orientada a objetos con la cual trabajar y muchas funciones extras. Por ejemplo, podemos utilizar el método first para obtener el primer resultado de la consulta (en el caso de este ejemplo, la primera profesión):
+$professions->first(); // en vez de $professions[0]
+1
+	
+$professions->first(); // en vez de $professions[0]
+
+Consultas con condicionales (WHERE)
+
+El constructor de consultas también nos permite realizar consultas condicionales utilizando where:
+$profession = DB::table('professions')->select('id')->where('title', '=', 'Desarrollador back-end')->first();
+1
+	
+$profession = DB::table('professions')->select('id')->where('title', '=', 'Desarrollador back-end')->first();
+
+El operador = dentro del método where es opcional. Pasando el nombre de la columna junto con el valor, Laravel asumirá que quieres usar el operador de comparación de igualdad (=):
+where('title', 'Desarrollador back-end')
+1
+	
+where('title', 'Desarrollador back-end')
+
+El método where también acepta un array asociativo, donde indicamos el nombre de la columna y el valor que esperamos encontrar:
+where(['title' => 'Desarrollador back-end'])
+1
+	
+where(['title' => 'Desarrollador back-end'])
+
+Métodos dinámicos
+
+También podemos utilizar métodos dinámicos:
+$profession = DB::table('professions')->whereTitle('Desarrollador back-end')->first();
+1
+	
+$profession = DB::table('professions')->whereTitle('Desarrollador back-end')->first();
+
+En este caso whereTitle es lo equivalente a escribir where('title', '=', 'Desarrollador back-end').
+Omitir el método select de DB::table
+
+Omitiendo el método select al utilizar DB::table podemos retornar todas las columnas:
+$profession = DB::table('professions')->where('title', '=', 'Desarrollador back-end')->first();
+1
+	
+$profession = DB::table('professions')->where('title', '=', 'Desarrollador back-end')->first();
+
+Ejercicios
+
+    Para esta lección inserta un usuario usando SQL de forma manual con DB::insert.
+    Mueve la columna profession_id para que esté luego de la columna id.
+    Utilizando el método DB::delete elimina una profesión.
+
+Material relacionado
+
+    Llamadas dinámicas a métodos con PHP
+    https://styde.net/llamadas-dinamicas-a-metodos-con-php/
+
+    Llamadas a métodos mágicos con __call y __callStatic en PHP
+    https://styde.net/llamadas-a-metodos-magicos-con-__call-y-__callstatic-en-php/
+
+    Constructores semánticos e interfaces fluidas
+    https://styde.net/named-constructors-and-fluent-interfaces/
+
+    Uso de marcadores o parametros en PHP
+    http://php.net/manual/es/pdo.prepare.php
+
+    Documentación oficial de Laravel (en inglés)
+    https://laravel.com/docs/5.5/database#running-queries
+
+    
