@@ -1,0 +1,86 @@
+Construcción de consultas SQL de Laravel
+
+https://styde.net/constructor-de-consultas-sql-de-laravel/
+
+En el Seeder de usuarios quedo pendiente enlazar la profession de la tabla profesiones con la tabla de usuarios.
+
+Esto se trabajara con el constructor de consultas de Laravel para ejecutar consultas SQL e oncluso como ejecutarlas sirectamente utilizando SQL.
+
+Debemos en el Seeder de Users llamar al constructor de consultas SQL
+
+DB::table()->insert()
+
+Primero llamamos al metodo table y luego al segundo metodo que puede ser insert, update, select. y delete.
+
+Se puede llamar directamente al metodo insert.
+
+DB::insert()
+
+Aun que este permitira interactuar en lugar del constructor de consultas SQL de Laravel.
+
+Si rvisamos la parte inferior logramos ejecutar ena consta SQL pero no escribimos nada de SQL
+
+Si queremos escribir consultas SQL directamente podria ser de ña sogiente manera
+
+DB::insert('INSERT INTO professions (title ) VALUES ("Desarrollador Back-End")');
+
+Podremos regresear a la cosulta y ejecutar:
+
+# art db:seed 
+
+Que es un alias de php artisan
+
+Con esto regresamos al administrrador de BD y revisar l tabla de profesiones que tengo un nuevo registro insertado.
+
+En este caso no hay problema la sentencia en escribir la de manera manual pero si este valor proviene de un usuario hay que tener mucho chidado de no cargarlo directamente puesto que se expone a ataques de inyeccion de SQL, entonces deberiamos utilizar un marcador para indicar la posiscion  de un parametro dinamico y luego utilizando Laravel podemos pasarlo como segundo argumento del insert de esta manera.
+
+Ya no necesitamos comills dobles.
+
+DB::insert('INSERT INTO professions (title ) VALUES (?)', ['Desarrollador back-end']);
+
+Y es que utilizando un signo ? como marcador vamos a utilizar un para,etro de sustitucion con nombre, en este caso title precedido con :title
+
+DB::insert('INSERT INTO professions (title ) VALUES (:title)', ['title' => 'Desarrollador back-end']);
+
+Necesario pasar un array asociativo donde indico el nombre del parametro de sustition y luego el valor que o va a reemplazar por supuesto.
+
+Si tengo mucho valores se puede colocar en varias lineas.
+
+y escho esto
+
+#: php artisan DB:ssed
+
+Y puedo ver que se tiene el mismo resultado aun.
+
+En el editor se descomenta el codigo inferior
+
+DB::table('professions')->insert([
+        	'title' => 'Desarrollador Back-end',
+        ]);
+
+        DB::table('professions')->insert([
+        	'title' => 'Desarrollador Front-end',
+        ]);
+
+        DB::table('professions')->insert([
+        	'title' => 'Diseñador Web',
+        ]);
+
+
+La diferencia de usutilizar el constructo de consultas de Laravel.
+
+Como modemos enlazar envontes una profesion a un usuario.
+
+Para ello vamos a utilizar la sentencia select.
+
+Para poder obtener la profesion de un desarrollador backend
+
+Primero se utilizara SQL Y no con el constructor de consultas fluido.
+
+
+
+
+
+
+
+
